@@ -1,25 +1,43 @@
 package fafij.server.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "users", schema = "public")
+@Table(name = "user", schema = "public")
 public class Users {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Integer id;
+        private Long id;
 
-        @Column
+        @Column(name = "login", nullable=false)
         private String login;
 
-        @Column(name = "pswd")
+        @Column(name = "password", nullable=false)
         private String password;
 
-        public Integer getId() {
+        @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+        @JoinTable(
+                name="user_roles",
+                joinColumns = @JoinColumn(name="id_user"),
+                inverseJoinColumns = @JoinColumn(name="id_jrnl")
+        )
+        private Set<Journal> journal = new HashSet<>();
+
+        @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+        @JoinTable(
+                name="user_roles",
+                joinColumns = @JoinColumn(name="id_user"),
+                inverseJoinColumns = @JoinColumn(name="id_role")
+        )
+        private Set<Roles> role = new HashSet<>();
+
+        public Long getId() {
                 return id;
         }
 
-        public void setId(Integer id) {
+        public void setId(Long id) {
                 this.id = id;
         }
 
@@ -37,6 +55,22 @@ public class Users {
 
         public void setPassword(String password) {
                 this.password = password;
+        }
+
+        public Set<Journal> getJournal() {
+                return journal;
+        }
+
+        public void setJournal(Set<Journal> journal) {
+                this.journal = journal;
+        }
+
+        public Set<Roles> getRole() {
+                return role;
+        }
+
+        public void setRole(Set<Roles> Role) {
+                this.role = role;
         }
 
         @Override
