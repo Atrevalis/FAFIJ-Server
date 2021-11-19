@@ -8,12 +8,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UsersRepository extends JpaRepository<Users, Long> {
+    Users findByLogin(String login);
     List<Users> findAllByLogin(String login);
-
-    @Modifying
-    @Query(value = "insert into users (Login, Password) VALUES (:Login,:Password)", nativeQuery = true)
-    @Transactional
-    void registration(@Param("Login") String Login, @Param("Password") String Password);
+    List<Users> findAll();
 }
