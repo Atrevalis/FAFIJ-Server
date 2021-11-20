@@ -24,11 +24,9 @@ public class UserService implements UserDetailsService {
     public void createUsers(Users users) {
         usersRepository.save(users);
     }
-
     public List<Users> findAll(){
         return this.usersRepository.findAll();
     }
-
     public Users findByLogin(String login){
         return usersRepository.findByLogin(login);
     }
@@ -36,7 +34,6 @@ public class UserService implements UserDetailsService {
     public List<Users> findAllByLogin(String login) {
         return usersRepository.findAllByLogin(login);
     }
-
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         Users u = findByLogin(login);
