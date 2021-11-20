@@ -13,10 +13,5 @@ import java.util.Optional;
 public interface UsersRepository extends JpaRepository<Users, Long> {
     Users findByLogin(String login);
     List<Users> findAllByLogin(String login);
-    Users findAllById(Long id);
-
-    @Modifying
-    @Query(value = "insert into user (login, password) VALUES (:login,:password)", nativeQuery = true)
-    @Transactional
-    void registration(@Param("login") String login, @Param("password") String password);
+    List<Users> findAll();
 }
