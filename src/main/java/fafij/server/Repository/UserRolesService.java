@@ -3,6 +3,8 @@ import fafij.server.entity.Journal;
 import fafij.server.entity.Roles;
 import fafij.server.entity.UserRoles;
 import fafij.server.entity.Users;
+import fafij.server.service.JournalRepository;
+import fafij.server.service.RolesRepository;
 import fafij.server.service.UserRolesRepository;
 import fafij.server.service.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,19 @@ public class UserRolesService {
     @Autowired
     private final UserRolesRepository userRolesRepository;
     private UsersRepository userRepository;
+    private JournalRepository journalRepository;
+    private RolesRepository rolesRepository;
 
     public UserRolesService(UserRolesRepository userRolesRepository){
         this.userRolesRepository = userRolesRepository;
     }
 
-    public void addUser(UserRoles role){
-        userRolesRepository.save(role);
+    public void addUser(Users user, Journal journal, Roles role){
+        UserRoles userRoles = new UserRoles();
+        userRoles.setIdUser(user);
+        userRoles.setIdJournal(journal);
+        userRoles.setIdRole(role);
+        userRolesRepository.save(userRoles);
     }
 
     public List<UserRoles> findAllByRole(UserRoles role){
@@ -35,24 +43,15 @@ public class UserRolesService {
         return userRolesRepository.findAllByIdJournal(id);
     }
 
-    public UserRoles findByUserJournal(UserRoles acc){
-        Users userEntity = findByUser(acc).getIdUser();
-        if (userEntity != null){
-            if(acc.getIdJournal().equals(userEntity.getJournal())){
-                return acc;
-            }
-        }
-        return null;
-    }
-
-    public UserRoles findByUser(UserRoles user){
-        Users id = user.getIdUser();
+    public UserRoles findByUser(String user){
+        Users id = userRepository.findByLogin(user);
         return userRolesRepository.findByIdUser(id);
     }
 
-    public void updateUserRoles(UserRoles user, UserRoles role){
+    public void updateUserRoles(String user, String role){
+        Roles roleName = rolesRepository.findByRoleName(role);
         UserRoles entity = findByUser(user);
-        entity.setIdRole(role.getIdRole());
+        entity.setIdRole(roleName);
     }
 
 }

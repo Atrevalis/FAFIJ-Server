@@ -25,9 +25,9 @@ public class NoteController {
     }
 
     @PostMapping("/deleteNote")
-    public void deleteNote(@RequestBody Note request, HttpServletResponse response){
+    public void deleteNote(@RequestBody Long request, HttpServletResponse response){
         try{
-            noteService.deleteNote(request);
+            noteService.deleteNote(noteService.findById(request));
             response.setStatus(HttpServletResponse.SC_CREATED);
         }catch (Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -35,11 +35,11 @@ public class NoteController {
     }
 
     @PostMapping("/deleteNoteAdmin")
-    public void deleteNoteAdmin(@RequestParam Note request, @RequestParam UserRoles admin, HttpServletResponse response){
+    public void deleteNoteAdmin(@RequestParam Long request, @RequestParam UserRoles admin, HttpServletResponse response){
         try{
             Long idRole = admin.getIdRole().getId();
             if(idRole == 1){
-                noteService.deleteNote(request);
+                noteService.deleteNote(noteService.findById(request));
                 response.setStatus(HttpServletResponse.SC_CREATED);
             }else{
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
@@ -50,11 +50,11 @@ public class NoteController {
     }
 
     @PostMapping("/deleteNoteAdult")
-    public void deleteNoteAdult(@RequestParam Note request, @RequestParam UserRoles adult, HttpServletResponse response){
+    public void deleteNoteAdult(@RequestParam Long request, @RequestParam UserRoles adult, HttpServletResponse response){
         try{
             Long idRole = adult.getIdRole().getId();
             if(idRole == 2){
-                noteService.deleteNote(request);
+                noteService.deleteNote(noteService.findById(request));
                 response.setStatus(HttpServletResponse.SC_CREATED);
             }else{
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
