@@ -4,6 +4,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.DefaultCsrfToken;
@@ -19,18 +20,20 @@ import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS
 
 @Repository
 public class JwtTokenRepository implements CsrfTokenRepository {
+
     @Getter
+    @Value("${jwt.token.secret}")
     private String secret;
 
     public JwtTokenRepository() {
-        this.secret = "springrest";
+        this.secret = secret;
     }
 
     @Override
     public CsrfToken generateToken(HttpServletRequest httpServletRequest) {
         String id = UUID.randomUUID().toString().replace("-", "");
         Date now = new Date();
-        Date exp = Date.from(LocalDateTime.now().plusMinutes(30)
+        Date exp = Date.from(LocalDateTime.now().plusMinutes(60)
                 .atZone(ZoneId.systemDefault()).toInstant());
 
         String token = "";
