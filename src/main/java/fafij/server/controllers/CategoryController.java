@@ -1,10 +1,12 @@
 package fafij.server.controllers;
 import fafij.server.Repository.CategoryService;
 import fafij.server.entity.Category;
+import fafij.server.entity.Journal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -50,12 +52,8 @@ public class CategoryController {
     }
 
     @PostMapping("/listCategory")
-    public void listCategory(HttpServletResponse response){
-        try {
-            categoryService.findAll();
-            response.setStatus(HttpServletResponse.SC_CREATED);
-        }catch (Exception e){
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-        }
+    public @ResponseBody
+    List<Category> findAll(){
+        return this.categoryService.findAll();
     }
 }
