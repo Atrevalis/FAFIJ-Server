@@ -1,10 +1,10 @@
 package fafij.server.controllers;
+
 import fafij.server.Repository.UserService;
 import fafij.server.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +16,7 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
     @PostMapping("/registration")
     public void registration(@RequestBody Users request, HttpServletResponse response) {
         try {
@@ -26,7 +27,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/private/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Users> getAll() {
         return this.userService.findAll();
     }
