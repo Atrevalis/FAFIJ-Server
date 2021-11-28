@@ -1,9 +1,6 @@
-package fafij.server.Utils;
+package fafij.server.utils;
 
 import java.util.List;
-
-import javax.persistence.criteria.CriteriaQuery;
-import javax.transaction.Transactional;
 
 import fafij.server.entity.Users;
 import org.hibernate.Session;
