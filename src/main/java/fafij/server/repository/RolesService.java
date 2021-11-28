@@ -1,4 +1,4 @@
-package fafij.server.Repository;
+package fafij.server.repository;
 
 import fafij.server.entity.Roles;
 import fafij.server.service.RolesRepository;

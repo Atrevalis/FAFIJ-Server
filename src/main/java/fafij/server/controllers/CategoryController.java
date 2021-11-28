@@ -1,14 +1,12 @@
 package fafij.server.controllers;
-import fafij.server.Repository.CategoryService;
-import fafij.server.Repository.UserRolesService;
+import fafij.server.repository.UserRolesService;
 import fafij.server.entity.Category;
-import fafij.server.entity.Journal;
+import fafij.server.repository.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @Controller
 @RequestMapping("/private")

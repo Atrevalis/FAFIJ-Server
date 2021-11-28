@@ -1,7 +1,7 @@
 package fafij.server.controllers;
-import fafij.server.Repository.NoteService;
-import fafij.server.Repository.UserRolesService;
-import fafij.server.Repository.UserService;
+import fafij.server.repository.NoteService;
+import fafij.server.repository.UserRolesService;
+import fafij.server.repository.UserService;
 import fafij.server.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,19 +1,14 @@
 package fafij.server.controllers;
 
-import fafij.server.Repository.UserService;
+import fafij.server.repository.UserService;
 import fafij.server.dto.JournalDTO;
-import fafij.server.entity.Journal;
-import fafij.server.entity.Roles;
 import fafij.server.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class UserController {

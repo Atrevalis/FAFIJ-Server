@@ -1,4 +1,4 @@
-package fafij.server.Repository;
+package fafij.server.repository;
 import fafij.server.entity.Category;
 import fafij.server.service.CategoryRepository;
 import fafij.server.service.JournalRepository;

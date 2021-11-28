@@ -1,4 +1,4 @@
-package fafij.server.Utils;
+package fafij.server.utils;
 
 import java.util.HashMap;
 import java.util.Map;

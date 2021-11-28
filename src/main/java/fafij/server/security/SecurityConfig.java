@@ -1,6 +1,6 @@
 package fafij.server.security;
 
-import fafij.server.Repository.UserService;
+import fafij.server.repository.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
