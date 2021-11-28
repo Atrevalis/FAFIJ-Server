@@ -1,13 +1,19 @@
 package fafij.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Table(name = "user", schema = "public")
+@Table(name = "users", schema = "public")
 public class Users {
         @Id
+        @Column(name = "id")
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
@@ -23,7 +29,7 @@ public class Users {
                 joinColumns = @JoinColumn(name="id_user"),
                 inverseJoinColumns = @JoinColumn(name="id_jrnl")
         )
-        private Set<Journal> journal = new HashSet<>();
+        private List<Journal> journal;
 
         @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
         @JoinTable(
@@ -31,7 +37,7 @@ public class Users {
                 joinColumns = @JoinColumn(name="id_user"),
                 inverseJoinColumns = @JoinColumn(name="id_role")
         )
-        private Set<Roles> role = new HashSet<>();
+        private List<Roles> role;
 
         public Long getId() {
                 return id;
@@ -57,61 +63,44 @@ public class Users {
                 this.password = password;
         }
 
-        public Set<Journal> getJournal() {
+        public List<Journal> getJournal() {
                 return journal;
         }
 
-        public void setJournal(Set<Journal> journal) {
+        public void setJournal(List<Journal> journal) {
                 this.journal = journal;
         }
 
-        public Set<Roles> getRole() {
+        public List<Roles> getRole() {
                 return role;
         }
 
-        public void setRole(Set<Roles> Role) {
+        public void setRole(List<Roles> role) {
                 this.role = role;
         }
 
         @Override
-        public int hashCode() {
-                final int prime = 31;
-                int result = 1;
-                result = prime * result + ((login == null) ? 0 : login.hashCode());
-                result = prime * result + ((id == null) ? 0 : id.hashCode());
-                result = prime * result + ((password == null) ? 0 : password.hashCode());
-                return result;
+        public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                Users users = (Users) o;
+                return Objects.equals(id, users.id) && Objects.equals(login, users.login) && Objects.equals(password, users.password) && Objects.equals(journal, users.journal) && Objects.equals(role, users.role);
         }
 
         @Override
-        public boolean equals(Object obj) {
-                if (this == obj)
-                        return true;
-                if (obj == null)
-                        return false;
-                if (getClass() != obj.getClass())
-                        return false;
-                Users other = (Users) obj;
-                if (login == null) {
-                        if (other.login != null)
-                                return false;
-                } else if (!login.equals(other.login))
-                        return false;
-                if (id == null) {
-                        if (other.id != null)
-                                return false;
-                } else if (!id.equals(other.id))
-                        return false;
-                if (password == null) {
-                        if (other.password != null)
-                                return false;
-                } else if (!password.equals(other.password))
-                        return false;
-                return true;
+        public int hashCode() {
+                return Objects.hash(id, login, password, journal, role);
         }
+
         @Override
         public String toString() {
-                return "Users [id=" + id + ", login=" + login + ", password=" + password + "]";
+                return "Users{" +
+                        "id=" + id +
+                        ", login='" + login + '\'' +
+                        ", password='" + password + '\'' +
+                        ", journal=" + journal +
+                        ", role=" + role +
+                        '}';
         }
 
         public Users() {

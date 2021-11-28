@@ -1,5 +1,10 @@
 package fafij.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,22 +15,23 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column(name="date")
+    private String date;
+
+    @Column(name="sum")
+    private Long sum;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ctgr", referencedColumnName = "id")
     private Category idCtgr;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_jrnl", referencedColumnName = "id")
     private Journal idJournal;
 
     @Column(name="comment")
     private String comment;
-
-    @Column(name="sum")
-    private Long sum;
-
-    @Column(name="date")
-    private String date;
 
     public Long getId() {
         return id;
@@ -43,6 +49,8 @@ public class Note {
         this.idCtgr = idCtgr;
     }
 
+    @JsonIgnore
+    @JsonProperty(value = "idJournal")
     public Journal getIdJournal() {
         return idJournal;
     }
