@@ -1,6 +1,4 @@
-package fafij.server.Repository;
-import fafij.server.entity.Journal;
-import fafij.server.entity.Roles;
+package fafij.server.repository;
 import fafij.server.entity.Users;
 import fafij.server.service.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;

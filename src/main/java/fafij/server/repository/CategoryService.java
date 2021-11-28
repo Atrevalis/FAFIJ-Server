@@ -1,8 +1,8 @@
-package fafij.server.Repository;
+package fafij.server.repository;
 import fafij.server.entity.Category;
+import fafij.server.entity.Journal;
 import fafij.server.service.CategoryRepository;
 import fafij.server.service.JournalRepository;
-import fafij.server.service.UserRolesRepository;
 import fafij.server.service.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,8 @@ public class CategoryService {
     }
 
     public Category findByNameAndIdJournal(String name, String journal){
-        return categoryRepository.findByNameAndIdJournal(name, journalRepository.findByName(journal));
+        Journal jrnl = journalRepository.findByName(journal);
+        return categoryRepository.findByNameAndIdJournal(name, jrnl);
     }
 
     public List<Category> findAllById(Iterable<Long> id){
