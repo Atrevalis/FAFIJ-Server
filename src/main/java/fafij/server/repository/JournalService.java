@@ -1,14 +1,9 @@
-package fafij.server.Repository;
+package fafij.server.repository;
 import fafij.server.entity.Journal;
-import fafij.server.entity.Note;
-import fafij.server.entity.UserRoles;
-import fafij.server.entity.Users;
 import fafij.server.service.JournalRepository;
 import fafij.server.service.UserRolesRepository;
 import fafij.server.service.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;

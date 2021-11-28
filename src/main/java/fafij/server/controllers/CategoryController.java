@@ -1,14 +1,14 @@
 package fafij.server.controllers;
-import fafij.server.Repository.CategoryService;
-import fafij.server.Repository.UserRolesService;
+import fafij.server.repository.CategoryService;
+import fafij.server.repository.UserRolesService;
 import fafij.server.entity.Category;
-import fafij.server.entity.Journal;
+import fafij.server.requestbodies.CategoryBody;
+import fafij.server.requestbodies.JournalName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @Controller
 @RequestMapping("/private")
@@ -19,11 +19,11 @@ public class CategoryController {
     private UserRolesService userRolesService;
 
     @PostMapping("/addCategory")
-    public void createCategory(@RequestParam String category, @RequestParam String login, @RequestParam String journalName, HttpServletResponse response){
+    public void createCategory(@RequestBody CategoryBody categoryBody, HttpServletResponse response){
         try{
-            Long idRole = userRolesService.findByUserAndJournal(login, journalName).getIdRole().getId();
+            Long idRole = userRolesService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName()).getIdRole().getId();
             if(idRole == 1 || idRole == 2){
-                categoryService.createCategory(category, journalName);
+                categoryService.createCategory(categoryBody.getCategory(), categoryBody.getJournalName());
                 response.setStatus(HttpServletResponse.SC_CREATED);
             }else{
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
@@ -34,11 +34,11 @@ public class CategoryController {
     }
 
     @PostMapping("/deleteCategory")
-    public void deleteCategory(@RequestParam String category, @RequestParam String login, @RequestParam String journalName, HttpServletResponse response){
+    public void deleteCategory(@RequestBody CategoryBody categoryBody, HttpServletResponse response){
         try{
-            Long idRole = userRolesService.findByUserAndJournal(login, journalName).getIdRole().getId();
+            Long idRole = userRolesService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName()).getIdRole().getId();
             if(idRole == 1 || idRole == 2){
-                Category ctgr = categoryService.findByNameAndIdJournal(category, journalName);
+                Category ctgr = categoryService.findByNameAndIdJournal(categoryBody.getCategory(), categoryBody.getJournalName());
                 categoryService.deleteCategory(ctgr);
                 response.setStatus(HttpServletResponse.SC_CREATED);
             }else{
@@ -51,7 +51,7 @@ public class CategoryController {
 
     @GetMapping("/listCategory")
     public @ResponseBody
-    String findAll(@RequestParam String journalName){
-        return this.categoryService.findAllByIdJournal(journalName).toString();
+    String findAll(@RequestBody JournalName journalName){
+        return this.categoryService.findAllByIdJournal(journalName.getJournalName()).toString();
     }
 }

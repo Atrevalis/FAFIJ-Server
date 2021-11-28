@@ -96,11 +96,7 @@ public class Users {
         public String toString() {
                 return "Users{" +
                         "id=" + id +
-                        ", login='" + login + '\'' +
-                        ", password='" + password + '\'' +
-                        ", journal=" + journal +
-                        ", role=" + role +
-                        '}';
+                        ", login='" + login + '\'' + '}';
         }
 
         public Users() {

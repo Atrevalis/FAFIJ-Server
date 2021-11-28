@@ -1,4 +1,4 @@
-package fafij.server.Repository;
+package fafij.server.repository;
 import fafij.server.entity.Journal;
 import fafij.server.entity.Roles;
 import fafij.server.entity.UserRoles;
@@ -9,7 +9,6 @@ import fafij.server.service.UserRolesRepository;
 import fafij.server.service.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 

@@ -1,8 +1,9 @@
 package fafij.server.controllers;
-import fafij.server.Repository.NoteService;
-import fafij.server.Repository.UserRolesService;
-import fafij.server.Repository.UserService;
+import fafij.server.repository.*;
 import fafij.server.entity.*;
+import fafij.server.requestbodies.AddNote;
+import fafij.server.requestbodies.DeleteNote;
+import fafij.server.requestbodies.JournalName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,16 @@ public class NoteController {
     @Autowired
     private NoteService noteService;
     @Autowired
-    private UserService userService;
+    private CategoryService categoryService;
     @Autowired
     private UserRolesService userRolesService;
+    @Autowired
+    private JournalService journalService;
 
     @PostMapping("/addNote")
-    public void createNote(@RequestParam String date, @RequestParam Long sum, @RequestParam String category, @RequestParam String comment, @RequestParam String journalName, HttpServletResponse response){
+    public void createNote(@RequestBody AddNote addNote, HttpServletResponse response){
         try{
-            noteService.createNote(date, sum, category, comment, journalName);
+            noteService.createNote(addNote.getDate(), addNote.getSum(), addNote.getCategory(), addNote.getComment(), addNote.getJournalName());
             response.setStatus(HttpServletResponse.SC_CREATED);
         }catch (Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -31,11 +34,11 @@ public class NoteController {
     }
 
     @PostMapping("/deleteNote")
-    public void deleteNote(@RequestParam Long idNote, @RequestParam String login, @RequestParam String journalName, HttpServletResponse response){
+    public void deleteNote(@RequestBody DeleteNote deleteNote, HttpServletResponse response){
         try{
-            Long idRole = userRolesService.findByUserAndJournal(login, journalName).getIdRole().getId();
+            Long idRole = userRolesService.findByUserAndJournal(deleteNote.getLogin(), deleteNote.getJournalName()).getIdRole().getId();
             if(idRole == 1 || idRole == 2){
-                noteService.deleteNote(idNote);
+                noteService.deleteNote(deleteNote.getIdNote());
                 response.setStatus(HttpServletResponse.SC_CREATED);
             }else{
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
@@ -47,7 +50,7 @@ public class NoteController {
 
     @GetMapping("/listNote")
     public @ResponseBody
-    List<Note> listNote(String journalName){
-        return this.noteService.findAllByJournal(journalName);
+    List<Note> listNote(@RequestBody JournalName journalName){
+        return this.noteService.findAllByJournal(journalName.getJournalName());
     }
 }

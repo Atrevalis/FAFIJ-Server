@@ -101,12 +101,7 @@ public class Journal {
     public String toString() {
         return "Journal{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", user=" + user +
-                ", idNote=" + idNote +
-                ", roles=" + roles +
-                ", idCategory=" + idCategory +
-                '}';
+                ", name='" + name + '\'' + '}';
     }
 
     public Journal() {
