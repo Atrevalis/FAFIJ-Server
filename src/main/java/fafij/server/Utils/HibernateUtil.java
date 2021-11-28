@@ -26,8 +26,8 @@ public class HibernateUtil {
                 settings.put(Environment.DRIVER, "org.postgresql.Driver");
                 settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/fafij");
                 settings.put(Environment.USER, "postgres");
-                settings.put(Environment.PASS, "1234");
-                settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQL9Dialect");
+                settings.put(Environment.PASS, "21062001");
+                settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQL13Dialect");
 
                 registryBuilder.applySettings(settings);
 

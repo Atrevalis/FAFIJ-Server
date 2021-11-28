@@ -1,7 +1,11 @@
 package fafij.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,10 +21,10 @@ public class Roles {
             joinColumns = @JoinColumn(name="id_role"),
             inverseJoinColumns = @JoinColumn(name="id_jrnl")
     )
-    private Set<Journal> journal = new HashSet<Journal>();
+    private List<Journal> journal;
 
     @ManyToMany(mappedBy="role")
-    private Set<Users> user = new HashSet<Users>();
+    private List<Users> user;
 
     @Column(name = "role_name", length = 15, unique = true, nullable = false)
     private String roleName;
@@ -33,19 +37,19 @@ public class Roles {
         this.id = id;
     }
 
-    public Set<Journal> getJournal() {
+    public List<Journal> getJournal() {
         return journal;
     }
 
-    public void setJournal(Set<Journal> journal) {
+    public void setJournal(List<Journal> journal) {
         this.journal = journal;
     }
 
-    public Set<Users> getUser() {
+    public List<Users> getUser() {
         return user;
     }
 
-    public void setUser(Set<Users> user) {
+    public void setUser(List<Users> user) {
         this.user = user;
     }
 

@@ -1,4 +1,6 @@
 package fafij.server.Repository;
+import fafij.server.entity.Journal;
+import fafij.server.entity.Roles;
 import fafij.server.entity.Users;
 import fafij.server.service.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -37,6 +40,10 @@ public class UserService implements UserDetailsService {
         return usersRepository.findAllByLogin(login);
     }
 
+    public Optional<Users> findById(Long id){
+        return usersRepository.findById(id);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         Users u = findByLogin(login);
@@ -45,4 +52,7 @@ public class UserService implements UserDetailsService {
         }
         return new org.springframework.security.core.userdetails.User(u.getLogin(), u.getPassword(), true, true, true, true, new HashSet<>());
     }
+
+
+
 }
