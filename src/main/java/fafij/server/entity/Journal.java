@@ -1,33 +1,46 @@
 package fafij.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.HashSet;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "journal", schema = "public")
 public class Journal {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", nullable=false, unique = true)
     private String name;
 
     @ManyToMany(mappedBy="journal")
-    private Set<Users> user = new HashSet<>();
+    private List<Users> user;
 
     @OneToMany(mappedBy = "idJournal")
-    private Set<Note> idNote;
+    private List<Note> idNote;
 
     @ManyToMany(mappedBy="journal")
-    private Set<Roles> roles = new HashSet<>();
+    private List<Roles> roles;
 
-    public Integer getId() {
+    @JsonManagedReference
+    @OneToMany(mappedBy = "idJournal", fetch=FetchType.LAZY)
+    private List<Category> idCategory;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,75 +52,61 @@ public class Journal {
         this.name = name;
     }
 
-    public Set<Users> getUser() {
+    public List<Users> getUser() {
         return user;
     }
 
-    public void setUser(Set<Users> user) {
+    public void setUser(List<Users> user) {
         this.user = user;
     }
 
-    public Set<Note> getIdNote() {
+    public List<Note> getIdNote() {
         return idNote;
     }
 
-    public void setIdNote(Set<Note> idNote) {
+    public void setIdNote(List<Note> idNote) {
         this.idNote = idNote;
     }
 
-    public Set<Roles> getRoles() {
+    public List<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Roles> roles) {
+    public void setRoles(List<Roles> roles) {
         this.roles = roles;
+    }
+
+    public List<Category> getIdCategory() {
+        return idCategory;
+    }
+
+    public void setIdCategory(List<Category> idCategory) {
+        this.idCategory = idCategory;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Journal journal = (Journal) o;
+        return Objects.equals(id, journal.id) && Objects.equals(name, journal.name) && Objects.equals(user, journal.user) && Objects.equals(idNote, journal.idNote) && Objects.equals(roles, journal.roles) && Objects.equals(idCategory, journal.idCategory);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        //result = prime * result + ((idRole == null) ? 0 : idRole.hashCode());
-       //result = prime * result + ((idNote == null) ? 0 : idNote.hashCode());
-        return result;
+        return Objects.hash(id, name, user, idNote, roles, idCategory);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Journal other = (Journal) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        /*if (idRole == null) {
-            if (other.idRole != null)
-                return false;
-        } else if (!idRole.equals(other.idRole))
-            return false;
-        if (idNote == null) {
-            if (other.idNote != null)
-                return false;
-        } else if (!idNote.equals(other.idNote))
-            return false;*/
-        return true;
-    }
-    @Override
     public String toString() {
-        return "Journal [id=" + id + ", name=" + name + "]";
+        return "Journal{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", user=" + user +
+                ", idNote=" + idNote +
+                ", roles=" + roles +
+                ", idCategory=" + idCategory +
+                '}';
     }
 
     public Journal() {
