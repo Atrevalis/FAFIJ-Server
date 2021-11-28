@@ -1,6 +1,9 @@
 package fafij.server.Repository;
 import fafij.server.entity.Category;
+import fafij.server.entity.Journal;
 import fafij.server.entity.Note;
+import fafij.server.service.CategoryRepository;
+import fafij.server.service.JournalRepository;
 import fafij.server.service.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,16 +14,28 @@ import java.util.Optional;
 public class NoteService {
     @Autowired
     private final NoteRepository noteRepository;
+    @Autowired
+    private JournalRepository journalRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public NoteService(NoteRepository noteRepository){
         this.noteRepository = noteRepository;
     }
 
-    public void createNote(Note note) {
+    public void createNote(String date, Long sum, String category, String comment, String journal) {
+        Note note = new Note();
+        note.setDate(date);
+        note.setSum(sum);
+        note.setIdCtgr(categoryRepository.findByName(category));
+        note.setComment(comment);
+        note.setIdJournal(journalRepository.findByName(journal));
         noteRepository.save(note);
     }
-    public void deleteNote(Optional<Note> note) {
-        noteRepository.delete(note.get());
+    public void deleteNote(Long note) {
+        Optional<Note> n = noteRepository.findById(note);
+        Note nn = n.get();
+        noteRepository.delete(nn);
     }
 
     public List<Note> findAllByCategory(Category category){
@@ -28,6 +43,11 @@ public class NoteService {
     }
     public Optional<Note> findById(Long id){
         return noteRepository.findById(id);
+    }
+
+    public List<Note> findAllByJournal(String journal){
+        Journal jrnl = journalRepository.findByName(journal);
+        return noteRepository.findAllByIdJournal(jrnl);
     }
 
 }

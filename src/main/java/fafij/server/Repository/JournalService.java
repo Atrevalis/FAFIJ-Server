@@ -1,29 +1,43 @@
 package fafij.server.Repository;
 import fafij.server.entity.Journal;
+import fafij.server.entity.Note;
+import fafij.server.entity.UserRoles;
 import fafij.server.entity.Users;
 import fafij.server.service.JournalRepository;
+import fafij.server.service.UserRolesRepository;
+import fafij.server.service.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JournalService {
     @Autowired
     private final JournalRepository journalRepository;
 
+    @Autowired
+    private UsersRepository usersRepository;
+
+    @Autowired
+    private UserRolesRepository userRolesRepository;
+
     public JournalService(JournalRepository journalRepository){
         this.journalRepository = journalRepository;
     }
 
-    public void createJournal(Journal journal) {
+    public void createJournal(String name) {
+        Journal journal = new Journal();
+        journal.setName(name);
         journalRepository.save(journal);
     }
 
     public List<Journal> findAllByName(String name){
         return journalRepository.findAllByName(name);
     }
-    public List<Journal> findAllById(Iterable<Long> id){
+    public List<Journal> findAllById(Long id){
         return journalRepository.findAllById(id);
     }
     public Journal findByName(String name){
@@ -34,5 +48,8 @@ public class JournalService {
     }
     public List<Journal> findAll() {
         return journalRepository.findAll();
+    }
+    public Optional<Journal> findById(Long id){
+        return journalRepository.findById(id);
     }
 }

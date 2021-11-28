@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
+@RequestMapping("/private")
 public class UserRolesController {
     @Autowired
     private UserRolesService userRolesService;
@@ -34,7 +36,7 @@ public class UserRolesController {
             Roles role = roleService.findByRoleName(roleName);
             if (user != null){
                 if(journal.getId().equals(user.getJournal())){
-                    userRolesService.updateUserRoles(userLogin, roleName);
+                    //userRolesService.updateUserRoles(userLogin, roleName);
                     response.setStatus(HttpServletResponse.SC_CREATED);
                 }
                 else {
@@ -54,9 +56,9 @@ public class UserRolesController {
         try{
             Users user = userService.findByLogin(userLogin);
             Journal journal = journalService.findByName(journalName);
-            String defaultRole = "Kid";
+            String defaultRole = "KID";
             Roles role = roleService.findByRoleName(defaultRole);
-            userRolesService.addUser(user, journal, role);
+            //userRolesService.addUser(user, journal, role);
             response.setStatus(HttpServletResponse.SC_CREATED);
         }catch (Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
