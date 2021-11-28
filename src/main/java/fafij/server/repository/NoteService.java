@@ -27,7 +27,7 @@ public class NoteService {
         Note note = new Note();
         note.setDate(date);
         note.setSum(sum);
-        note.setIdCtgr(categoryRepository.findByName(category));
+        note.setIdCtgr(categoryRepository.findByNameAndIdJournal(category, journalRepository.findByName(journal)));
         note.setComment(comment);
         note.setIdJournal(journalRepository.findByName(journal));
         noteRepository.save(note);
@@ -49,5 +49,4 @@ public class NoteService {
         Journal jrnl = journalRepository.findByName(journal);
         return noteRepository.findAllByIdJournal(jrnl);
     }
-
 }

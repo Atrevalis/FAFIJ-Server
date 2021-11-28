@@ -3,6 +3,7 @@ package fafij.server.controllers;
 import fafij.server.repository.UserService;
 import fafij.server.dto.JournalDTO;
 import fafij.server.entity.Users;
+import fafij.server.requestbodies.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/registration")
-    public void registration(@RequestBody Users request, HttpServletResponse response) {
+    public void registration(@RequestBody Users user, HttpServletResponse response) {
         try {
-            userService.createUsers(request);
+            userService.createUsers(user);
             response.setStatus(HttpServletResponse.SC_CREATED);
        }catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -27,8 +28,8 @@ public class UserController {
 
     @GetMapping(path="/private/userJournals")
     public @ResponseBody
-    List<JournalDTO> getAllJrnl(@RequestParam String login){
-        Users user = userService.findByLogin(login);
+    List<JournalDTO> getAllJrnl(@RequestBody Login login){
+        Users user = userService.findByLogin(login.getLogin());
         JournalDTO journalDTO = new JournalDTO();
         return journalDTO.getJournalDTOList(user.getJournal());
     }
