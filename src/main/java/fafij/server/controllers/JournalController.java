@@ -42,8 +42,13 @@ public class JournalController {
     @PostMapping("/addUser")
     public void addUser(@RequestBody AddUser addUser, HttpServletResponse response){
         try {
-            invitationsService.addInvitation(addUser.getLogin(), addUser.getJournalName(), addUser.getRole());
-            response.setStatus(HttpServletResponse.SC_CREATED);
+            Long idRole = userRolesService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName()).getIdRole().getId();
+            if(idRole == 1){
+                invitationsService.addInvitation(addUser.getLogin(), addUser.getJournalName(), addUser.getRole());
+                response.setStatus(HttpServletResponse.SC_CREATED);
+            }else{
+                response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+            }
         }catch (Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
