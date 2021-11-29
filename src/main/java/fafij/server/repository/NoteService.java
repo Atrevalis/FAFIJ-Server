@@ -38,6 +38,15 @@ public class NoteService {
         noteRepository.delete(nn);
     }
 
+    public void updateNote(Long id, String date, Long sum, String category, String comment){
+        Note note = noteRepository.findById(id).get();
+        note.setDate(date);
+        note.setSum(sum);
+        note.setIdCtgr(categoryRepository.findByName(category));
+        note.setComment(comment);
+        noteRepository.save(note);
+    }
+
     public List<Note> findAllByCategory(Category category){
         return noteRepository.findAllByIdCtgr(category);
     }
