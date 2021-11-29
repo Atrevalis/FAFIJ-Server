@@ -34,8 +34,4 @@ public class InvitationsService {
         invite.setAccepted(false);
         invitationsRepository.save(invite);
     }
-
-    public List<Invitations> userInvitations(String login){
-        return invitationsRepository.findAllByIdUserAndAccepted(usersRepository.findByLogin(login), false);
-    }
 }
