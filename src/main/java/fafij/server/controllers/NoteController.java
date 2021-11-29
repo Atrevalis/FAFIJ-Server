@@ -5,6 +5,7 @@ import fafij.server.entity.*;
 import fafij.server.requestbodies.AddNote;
 import fafij.server.requestbodies.DeleteNote;
 import fafij.server.requestbodies.JournalName;
+import fafij.server.requestbodies.UpdateNote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -55,5 +56,20 @@ public class NoteController {
         Journal journal = journalService.findByName(journalName.getJournalName());
         NoteDTO noteDTO = new NoteDTO();
         return noteDTO.getNoteDTOList(journal.getIdNote());
+    }
+
+    @PostMapping("/updateNote")
+    public void update(@RequestBody UpdateNote updateNote, HttpServletResponse response){
+        try{
+            Long idRole = userRolesService.findByUserAndJournal(updateNote.getLogin(), noteService.findById(updateNote.getId()).get().getIdJournal().getName()).getIdRole().getId();
+            if(idRole == 1 || idRole == 2){
+                noteService.updateNote(updateNote.getId(), updateNote.getDate(), updateNote.getSum(), updateNote.getCategory(), updateNote.getComment());
+                response.setStatus(HttpServletResponse.SC_OK);
+            }else{
+                response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+            }
+        }catch(Exception e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }
