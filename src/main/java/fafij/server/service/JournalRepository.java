@@ -18,4 +18,5 @@ public interface JournalRepository extends JpaRepository<Journal, Long> {
     Journal findByName(String name);
     Optional<Journal> findById(Long id);
     List<Journal> findAllById(Long id);
+    Boolean existsByName(String name);
 }

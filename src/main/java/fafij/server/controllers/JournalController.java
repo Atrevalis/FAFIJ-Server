@@ -3,6 +3,7 @@ import fafij.server.repository.*;
 import fafij.server.requestbodies.AddUser;
 import fafij.server.requestbodies.CreateJournal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +26,14 @@ public class JournalController {
     @PostMapping("/createJournal")
     public void createJournal(@RequestBody CreateJournal createJournal, HttpServletResponse response){
         try {
-            journalService.createJournal(createJournal.getJournalName());
-            String role = "ADMIN";
-            userRolesService.setUserRoles(createJournal.getLogin(), createJournal.getJournalName(), role);
-            response.setStatus(HttpServletResponse.SC_CREATED);
+            if(journalService.existsByNAme(createJournal.getJournalName())){
+                journalService.createJournal(createJournal.getJournalName());
+                String role = "ADMIN";
+                userRolesService.setUserRoles(createJournal.getLogin(), createJournal.getJournalName(), role);
+                response.setStatus(HttpServletResponse.SC_CREATED);
+            }else{
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+            }
         }catch (Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
