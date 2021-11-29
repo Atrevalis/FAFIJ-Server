@@ -26,7 +26,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(path="/private/userJournals")
+    @PostMapping(path="/private/userJournals")
     public @ResponseBody
     List<JournalDTO> getAllJrnl(@RequestBody Login login){
         Users user = userService.findByLogin(login.getLogin());
