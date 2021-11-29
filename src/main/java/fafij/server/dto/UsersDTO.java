@@ -14,9 +14,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UsersDTO {
 
-    //private long id;
     private String login;
-    private String password;
     private List<JournalDTO> journal;
     private List<Roles> role;
 
@@ -39,13 +37,6 @@ public class UsersDTO {
         return usersDTOList;
     }
 
-    /*public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }*/
 
     public String getLogin() {
         return login;
@@ -53,14 +44,6 @@ public class UsersDTO {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public List<JournalDTO> getJournal() {

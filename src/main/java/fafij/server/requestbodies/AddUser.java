@@ -1,6 +1,6 @@
 package fafij.server.requestbodies;
 
-public class JournalLoginRole {
+public class AddUser {
     private String journalName;
     private String login;
     private String role;
@@ -29,7 +29,7 @@ public class JournalLoginRole {
         this.role = role;
     }
 
-    public JournalLoginRole(String journalName, String login, String role) {
+    public AddUser(String journalName, String login, String role) {
         this.journalName = journalName;
         this.login = login;
         this.role = role;
