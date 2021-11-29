@@ -1,6 +1,7 @@
 package fafij.server.repository;
 
 import fafij.server.entity.Invitations;
+import fafij.server.entity.Journal;
 import fafij.server.entity.Users;
 import fafij.server.service.InvitationsRepository;
 import fafij.server.service.JournalRepository;
@@ -33,5 +34,16 @@ public class InvitationsService {
         invite.setIdRole(rolesRepository.findByRoleName(roleName));
         invite.setAccepted(false);
         invitationsRepository.save(invite);
+    }
+
+    public Invitations findByUserAndJournalAndAccept(String login, String journalName){
+        Users user = usersRepository.findByLogin(login);
+        Journal journal = journalRepository.findByName(journalName);
+        return invitationsRepository.findByIdUserAndIdJournalAndAccepted(user, journal, false);
+    }
+
+    public void updateStatus(Invitations invitations){
+        invitations.setAccepted(true);
+        invitationsRepository.save(invitations);
     }
 }

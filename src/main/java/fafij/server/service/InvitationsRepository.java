@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface InvitationsRepository extends JpaRepository<Invitations, Long> {
     List<Invitations> findAllByIdUserAndAccepted(Users user, Boolean accept);
+    Invitations findByIdUserAndIdJournalAndAccepted(Users user, Journal journal, Boolean accept);
 }
