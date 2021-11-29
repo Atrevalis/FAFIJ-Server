@@ -19,20 +19,23 @@ public class InvitationsDTO {
     private JournalDTO journal;
     @JsonProperty("role")
     private RoleDTO idRole;
+    private Boolean accept;
 
     @Transactional
     public List<InvitationsDTO> getInvitationsDTOList(List<Invitations> invitationsList){
         List<InvitationsDTO> invitationsDTOList = new ArrayList<>();
 
         for(Invitations invitations : invitationsList){
-            journal = new JournalDTO();
-            idRole = new RoleDTO();
-            InvitationsDTO invitationsDTO = new InvitationsDTO();
-            journal.setName(invitations.getIdJournal().getName());
-            idRole.setName(invitations.getIdRole().getRoleName());
-            invitationsDTO.setJournal(journal);
-            invitationsDTO.setIdRole(idRole);
-            invitationsDTOList.add(invitationsDTO);
+            if(!invitations.getAccepted()){
+                journal = new JournalDTO();
+                idRole = new RoleDTO();
+                InvitationsDTO invitationsDTO = new InvitationsDTO();
+                journal.setName(invitations.getIdJournal().getName());
+                idRole.setName(invitations.getIdRole().getRoleName());
+                invitationsDTO.setJournal(journal);
+                invitationsDTO.setIdRole(idRole);
+                invitationsDTOList.add(invitationsDTO);
+            }
         }
         return invitationsDTOList;
     }
@@ -51,5 +54,13 @@ public class InvitationsDTO {
 
     public void setIdRole(RoleDTO idRole) {
         this.idRole = idRole;
+    }
+
+    public Boolean getAccept() {
+        return accept;
+    }
+
+    public void setAccept(Boolean accept) {
+        this.accept = accept;
     }
 }

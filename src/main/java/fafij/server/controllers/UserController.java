@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import fafij.server.dto.InvitationsDTO;
 import fafij.server.entity.Invitations;
 import fafij.server.repository.InvitationsService;
+import fafij.server.repository.UserRolesService;
 import fafij.server.repository.UserService;
 import fafij.server.dto.JournalDTO;
 import fafij.server.entity.Users;
+import fafij.server.requestbodies.Accept;
 import fafij.server.requestbodies.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,9 @@ public class UserController {
     private UserService userService;
     @Autowired
     private InvitationsService invitationsService;
+    @Autowired
+    private UserRolesService userRolesService;
+
     @PostMapping("/registration")
     public void registration(@RequestBody Users user, HttpServletResponse response) {
         try {
@@ -44,5 +49,15 @@ public class UserController {
         Users user = userService.findByLogin(login.getLogin());
         InvitationsDTO invitationsDTO = new InvitationsDTO();
         return invitationsDTO.getInvitationsDTOList(user.getIdInvitations());
+    }
+
+    @PostMapping("/private/accept")
+    public void accept(@RequestBody Accept accept, HttpServletResponse response){
+        Invitations invitations = invitationsService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
+        String user = invitations.getIdUser().getLogin();
+        String journal = invitations.getIdJournal().getName();
+        String role = invitations.getIdRole().getRoleName();
+        userRolesService.setUserRoles(user, journal, role);
+        invitationsService.updateStatus(invitations);
     }
 }
