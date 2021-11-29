@@ -51,6 +51,10 @@ public class CategoryService {
         return categoryRepository.findByNameAndIdJournal(name, jrnl);
     }
 
+    public Boolean checkCategory(String name, String journal){
+        return !categoryRepository.existsByNameAndIdJournal(name, journalRepository.findByName(journal));
+    }
+
     public List<Category> findAllById(Iterable<Long> id){
         return categoryRepository.findAllById(id);
     }

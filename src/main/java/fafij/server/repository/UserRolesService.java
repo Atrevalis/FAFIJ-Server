@@ -28,14 +28,6 @@ public class UserRolesService {
         this.userRolesRepository = userRolesRepository;
     }
 
-    public void addUser(String user, String journal, String role){
-        UserRoles userRoles = new UserRoles();
-        userRoles.setIdUser(userRepository.findByLogin(user));
-        userRoles.setIdJournal(journalRepository.findByName(journal));
-        userRoles.setIdRole(rolesRepository.findByRoleName(role));
-        userRolesRepository.save(userRoles);
-    }
-
     public List<UserRoles> findAllByRole(UserRoles role){
         Roles id = role.getIdRole();
         return userRolesRepository.findAllByIdRole(id);

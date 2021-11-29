@@ -59,13 +59,4 @@ public class UserService implements UserDetailsService {
         }
         return new org.springframework.security.core.userdetails.User(u.getLogin(), u.getPassword(), true, true, true, true, new HashSet<>());
     }
-
-    public void addJournal(String login, String journalName, String roleName){
-        Users user = usersRepository.findByLogin(login);
-        Journal journal = journalRepository.findByName(journalName);
-        Roles role = rolesRepository.findByRoleName(roleName);
-        user.getRole().add(role);
-        user.getJournal().add(journal);
-        usersRepository.save(user);
-    }
 }

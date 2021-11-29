@@ -60,7 +60,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             userRoles.setIdRole(roles);
         }
 
-    @Test
+    /*@Test
     public void getFindAllNoteFromJournalTest()
     throws Exception {
 
@@ -70,11 +70,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         given(categoryService.findAllByIdJournal("0")).willReturn(strings);
 
-      /* mvc.perform(get("/api/employees")
+      *//* mvc.perform(get("/api/employees")
                 .contentType(MediaType.ALL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].name", is(alex.getName()))); */
+                .andExpect(jsonPath("$[0].name", is(alex.getName()))); *//*
         }
 
     @ParameterizedTest
@@ -144,5 +144,5 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         mvc.perform(post("/deleteCategory")
                 .contentType(MediaType.ALL))
                 .andExpect(status().isCreated());
-    }
+    }*/
 }
