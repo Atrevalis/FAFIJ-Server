@@ -4,6 +4,7 @@ public class AddUser {
     private String journalName;
     private String login;
     private String role;
+    private String admin;
 
     public String getJournalName() {
         return journalName;
@@ -29,9 +30,18 @@ public class AddUser {
         this.role = role;
     }
 
+    public String getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
     public AddUser(String journalName, String login, String role) {
         this.journalName = journalName;
         this.login = login;
         this.role = role;
+        this.admin = admin;
     }
 }
