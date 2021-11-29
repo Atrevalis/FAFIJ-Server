@@ -2,7 +2,6 @@ package fafij.server.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "user_roles", schema = "public")

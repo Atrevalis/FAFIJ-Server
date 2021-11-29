@@ -48,7 +48,7 @@ public class NoteController {
         }
     }
 
-    @GetMapping("/listNote")
+    @PostMapping("/listNote")
     public @ResponseBody
     List<Note> listNote(@RequestBody JournalName journalName){
         return this.noteService.findAllByJournal(journalName.getJournalName());

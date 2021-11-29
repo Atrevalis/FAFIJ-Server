@@ -49,7 +49,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/listCategory")
+    @PostMapping("/listCategory")
     public @ResponseBody
     String findAll(@RequestBody JournalName journalName){
         return this.categoryService.findAllByIdJournal(journalName.getJournalName()).toString();
