@@ -16,7 +16,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JournalDTO {
 
-    //private long id;
     @JsonProperty("journalName")
     private String name;
     @JsonProperty("logins")
@@ -44,13 +43,6 @@ public class JournalDTO {
         return journalDTOList;
     }
 
-    /*public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }*/
 
     public String getName() {
         return name;
@@ -66,14 +58,6 @@ public class JournalDTO {
 
     public void setUser(List<UsersDTO> user) {
         this.user = user;
-    }
-
-    public List<Note> getIdNote() {
-        return idNote;
-    }
-
-    public void setIdNote(List<Note> idNote) {
-        this.idNote = idNote;
     }
 
     public List<Roles> getRoles() {

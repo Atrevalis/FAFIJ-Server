@@ -1,7 +1,9 @@
 package fafij.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.*;
@@ -31,6 +33,9 @@ public class Journal {
 
     @OneToMany(mappedBy = "idJournal")
     private List<Note> idNote;
+
+    @OneToMany(mappedBy = "idJournal")
+    private List<Invitations> idInvitations;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "idJournal", fetch=FetchType.LAZY)
@@ -82,6 +87,14 @@ public class Journal {
 
     public void setRole(List<Roles> role) {
         this.role = role;
+    }
+
+    public List<Invitations> getIdInvitations() {
+        return idInvitations;
+    }
+
+    public void setIdInvitations(List<Invitations> idInvitations) {
+        this.idInvitations = idInvitations;
     }
 
     @Override
