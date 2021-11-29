@@ -27,7 +27,7 @@ public class JournalController {
         try {
             journalService.createJournal(createJournal.getJournalName());
             String role = "ADMIN";
-            userService.addJournal(createJournal.getLogin(), createJournal.getJournalName(), role);
+            userRolesService.setUserRoles(createJournal.getLogin(), createJournal.getJournalName(), role);
             response.setStatus(HttpServletResponse.SC_CREATED);
         }catch (Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
