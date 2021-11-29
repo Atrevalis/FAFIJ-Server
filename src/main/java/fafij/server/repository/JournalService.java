@@ -47,4 +47,7 @@ public class JournalService {
     public Optional<Journal> findById(Long id){
         return journalRepository.findById(id);
     }
+    public Boolean existsByNAme(String name){
+        return !journalRepository.existsByName(name);
+    }
 }
