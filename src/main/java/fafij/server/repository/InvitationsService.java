@@ -28,12 +28,10 @@ public class InvitationsService {
     }
 
     public void addInvitation(String login, String journalName, String roleName){
-        Invitations invite = new Invitations();
-        invite.setIdUser(usersRepository.findByLogin(login));
-        invite.setIdJournal(journalRepository.findByName(journalName));
-        invite.setIdRole(rolesRepository.findByRoleName(roleName));
-        invite.setAccepted(false);
-        invitationsRepository.save(invite);
+        Long id_user = usersRepository.findByLogin(login).getId();
+        Long id_jrnl = journalRepository.findByName(journalName).getId();
+        Long id_role = rolesRepository.findByRoleName(roleName).getId();
+        invitationsRepository.addInvitation(id_user, id_jrnl, id_role);
     }
 
     public Invitations findByUserAndJournalAndAccept(String login, String journalName){
