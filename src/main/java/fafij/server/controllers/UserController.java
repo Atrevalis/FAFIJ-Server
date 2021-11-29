@@ -65,4 +65,15 @@ public class UserController {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/private/decline")
+    public void decline(@RequestBody Accept accept, HttpServletResponse response){
+        try{
+            Invitations invitations = invitationsService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
+            invitationsService.delete(invitations);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }catch(Exception e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
