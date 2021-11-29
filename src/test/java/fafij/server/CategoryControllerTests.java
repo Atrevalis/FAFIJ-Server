@@ -135,7 +135,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     }
 
     @Test
-    public void DeleteeCategoryTestWithError() throws Exception {
+    public void DeleteCategoryTestWithError() throws Exception {
 
         userRoles.getIdRole().setId(Constants.KidRole);
         given(userRolesService.findByUserAndJournal(login, journalName)).willThrow(new IllegalStateException("Error occurred"));
