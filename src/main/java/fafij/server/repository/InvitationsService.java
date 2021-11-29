@@ -46,4 +46,8 @@ public class InvitationsService {
         invitations.setAccepted(true);
         invitationsRepository.save(invitations);
     }
+
+    public void delete(Invitations invitations){
+        invitationsRepository.delete(invitations);
+    }
 }
