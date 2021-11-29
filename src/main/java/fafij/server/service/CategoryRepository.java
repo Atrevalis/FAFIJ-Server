@@ -13,4 +13,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAllByIdJournal(Journal journalName);
     Category findByName(String name);
     Category findByNameAndIdJournal(String name, Journal journalName);
+    Boolean existsByNameAndIdJournal(String name, Journal journalName);
 }

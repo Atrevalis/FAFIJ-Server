@@ -1,4 +1,5 @@
 package fafij.server.controllers;
+import fafij.server.dto.NoteDTO;
 import fafij.server.repository.*;
 import fafij.server.entity.*;
 import fafij.server.requestbodies.AddNote;
@@ -50,7 +51,9 @@ public class NoteController {
 
     @PostMapping("/listNote")
     public @ResponseBody
-    List<Note> listNote(@RequestBody JournalName journalName){
-        return this.noteService.findAllByJournal(journalName.getJournalName());
+    List<NoteDTO> listNote(@RequestBody JournalName journalName){
+        Journal journal = journalService.findByName(journalName.getJournalName());
+        NoteDTO noteDTO = new NoteDTO();
+        return noteDTO.getNoteDTOList(journal.getIdNote());
     }
 }

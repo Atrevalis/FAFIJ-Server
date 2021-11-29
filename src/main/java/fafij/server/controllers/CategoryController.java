@@ -21,10 +21,15 @@ public class CategoryController {
     @PostMapping("/addCategory")
     public void createCategory(@RequestBody CategoryBody categoryBody, HttpServletResponse response){
         try{
-            Long idRole = userRolesService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName()).getIdRole().getId();
-            if(idRole == 1 || idRole == 2){
-                categoryService.createCategory(categoryBody.getCategory(), categoryBody.getJournalName());
-                response.setStatus(HttpServletResponse.SC_CREATED);
+            if(categoryService.checkCategory(categoryBody.getCategory(), categoryBody.getJournalName()) && categoryBody.getCategory() != null && !categoryBody.getCategory().isEmpty()){
+                Long idRole = userRolesService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName()).getIdRole().getId();
+                if(idRole == 1 || idRole == 2){
+                    categoryService.createCategory(categoryBody.getCategory(), categoryBody.getJournalName());
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                }
+
             }else{
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
             }
