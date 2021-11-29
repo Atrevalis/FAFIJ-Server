@@ -34,6 +34,9 @@ public class Users {
         )
         private List<Roles> role;
 
+        @OneToMany(mappedBy = "idUser")
+        private List<Invitations> idInvitations;
+
         public Long getId() {
                 return id;
         }
@@ -72,6 +75,14 @@ public class Users {
 
         public void setRole(List<Roles> role) {
                 this.role = role;
+        }
+
+        public List<Invitations> getIdInvitations() {
+                return idInvitations;
+        }
+
+        public void setIdInvitations(List<Invitations> idInvitations) {
+                this.idInvitations = idInvitations;
         }
 
         @Override
