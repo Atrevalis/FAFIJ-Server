@@ -46,7 +46,6 @@ public class NoteService {
     }
 
     public List<Note> findAllByJournal(String journal){
-        Journal jrnl = journalRepository.findByName(journal);
-        return noteRepository.findAllByIdJournal(jrnl);
+        return noteRepository.findAllByIdJournal(journalRepository.findByName(journal));
     }
 }
