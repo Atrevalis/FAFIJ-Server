@@ -31,7 +31,7 @@ public class CategoryController {
                 }
 
             }else{
-                response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
             }
         }catch (Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

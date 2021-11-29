@@ -53,11 +53,16 @@ public class UserController {
 
     @PostMapping("/private/accept")
     public void accept(@RequestBody Accept accept, HttpServletResponse response){
-        Invitations invitations = invitationsService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
-        String user = invitations.getIdUser().getLogin();
-        String journal = invitations.getIdJournal().getName();
-        String role = invitations.getIdRole().getRoleName();
-        userRolesService.setUserRoles(user, journal, role);
-        invitationsService.updateStatus(invitations);
+        try{
+            Invitations invitations = invitationsService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
+            String user = invitations.getIdUser().getLogin();
+            String journal = invitations.getIdJournal().getName();
+            String role = invitations.getIdRole().getRoleName();
+            userRolesService.setUserRoles(user, journal, role);
+            invitationsService.updateStatus(invitations);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }catch(Exception e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }
