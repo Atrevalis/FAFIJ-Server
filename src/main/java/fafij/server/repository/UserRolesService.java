@@ -56,6 +56,10 @@ public class UserRolesService {
         return userRolesRepository.findAllByIdUser(id);
     }
 
+    public Boolean checkUser(String login, String journalName){
+        return !userRolesRepository.existsByIdUserAndAndIdJournal(userRepository.findByLogin(login), journalRepository.findByName(journalName));
+    }
+
     /*public void updateUserRoles(String user, String role){
         Roles roleName = rolesRepository.findByRoleName(role);
         UserRoles entity = findByUser(user);
