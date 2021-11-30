@@ -7,6 +7,10 @@ import fafij.server.service.JournalRepository;
 import fafij.server.service.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +27,11 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public void createNote(String date, Long sum, String category, String comment, String journal) {
+    public void createNote(String date, Long sum, String category, String comment, String journal) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        Date dates = format.parse(date);
         Note note = new Note();
-        note.setDate(date);
+        note.setDate(dates);
         note.setSum(sum);
         note.setIdCtgr(categoryRepository.findByNameAndIdJournal(category, journalRepository.findByName(journal)));
         note.setComment(comment);
@@ -38,9 +44,11 @@ public class NoteService {
         noteRepository.delete(nn);
     }
 
-    public void updateNote(Long id, String date, Long sum, String category, String comment){
+    public void updateNote(Long id, String date, Long sum, String category, String comment) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        Date dates = format.parse(date);
         Note note = noteRepository.findById(id).get();
-        note.setDate(date);
+        note.setDate(dates);
         note.setSum(sum);
         note.setIdCtgr(categoryRepository.findByName(category));
         note.setComment(comment);
@@ -56,5 +64,9 @@ public class NoteService {
 
     public List<Note> findAllByJournal(String journal){
         return noteRepository.findAllByIdJournal(journalRepository.findByName(journal));
+    }
+
+    public List<Note> findAllByIdJournalOrderByDate(String journalName){
+        return noteRepository.findAllByIdJournalOrderByDate(journalRepository.findByName(journalName));
     }
 }
