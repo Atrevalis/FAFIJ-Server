@@ -7,7 +7,10 @@ import fafij.server.entity.Note;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @EnableTransactionManagement
@@ -20,6 +23,8 @@ public class NoteDTO {
     private CategoryDTO idCtgr;
     private String comment;
 
+    DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+
     @Transactional
     public List<NoteDTO> getNoteDTOList(List<Note> noteList){
         List<NoteDTO> noteDTOList = new ArrayList<>();
@@ -28,7 +33,7 @@ public class NoteDTO {
             idCtgr = new CategoryDTO();
             NoteDTO noteDTO = new NoteDTO();
             noteDTO.setId(note.getId());
-            noteDTO.setDate(note.getDate());
+            noteDTO.setDate(df.format(note.getDate()));
             noteDTO.setSum(note.getSum());
             idCtgr.setName(note.getIdCtgr().getName());
             noteDTO.setIdCtgr(idCtgr);

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "note", schema = "public")
@@ -14,7 +15,7 @@ public class Note {
     private Long id;
 
     @Column(name="date", nullable=false)
-    private String date;
+    private Date date;
 
     @Column(name="sum", nullable=false)
     private Long sum;
@@ -73,11 +74,11 @@ public class Note {
         this.sum = sum;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
