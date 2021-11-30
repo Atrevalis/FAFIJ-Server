@@ -1,9 +1,9 @@
 package fafij.server.requestbodies;
 
 public class UpdateNote {
-    private long id;
+    private Long id;
     private String date;
-    private long sum;
+    private Long sum;
     private String category;
     private String comment;
     private String login;
@@ -28,7 +28,7 @@ public class UpdateNote {
         return sum;
     }
 
-    public void setSum(long sum) {
+    public void setSum(Long sum) {
         this.sum = sum;
     }
 
@@ -56,7 +56,7 @@ public class UpdateNote {
         this.login = login;
     }
 
-    public UpdateNote(Long id, String date, long sum, String category, String comment, String login) {
+    public UpdateNote(Long id, String date, Long sum, String category, String comment, String login) {
         this.id = id;
         this.date = date;
         this.sum = sum;
