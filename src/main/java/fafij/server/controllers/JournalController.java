@@ -42,7 +42,7 @@ public class JournalController {
     @PostMapping("/addUser")
     public void addUser(@RequestBody AddUser addUser, HttpServletResponse response){
         try {
-            if(userRolesService.checkUser(addUser.getLogin(), addUser.getJournalName())){
+            if(userRolesService.checkUser(addUser.getLogin(), addUser.getJournalName()) && invitationsService.checkUser(addUser.getLogin(), addUser.getJournalName())){
                 Long idRole = userRolesService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName()).getIdRole().getId();
                 if(idRole == 1){
                     invitationsService.addInvitation(addUser.getLogin(), addUser.getJournalName(), addUser.getRole());
