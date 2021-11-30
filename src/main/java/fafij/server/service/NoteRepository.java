@@ -18,5 +18,5 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> findAllByIdCtgr(Category category);
     Optional<Note> findById(Long id);
     List<Note> findAllByIdJournal(Journal journal);
-    List<Note> findAllByIdJournalOrderByDate(Journal journal);
+    List<Note> findAllByIdJournalOrderByDateDesc(Journal journal);
 }
