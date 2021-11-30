@@ -67,6 +67,6 @@ public class NoteService {
     }
 
     public List<Note> findAllByIdJournalOrderByDate(String journalName){
-        return noteRepository.findAllByIdJournalOrderByDate(journalRepository.findByName(journalName));
+        return noteRepository.findAllByIdJournalOrderByDateDesc(journalRepository.findByName(journalName));
     }
 }
