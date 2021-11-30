@@ -48,4 +48,8 @@ public class InvitationsService {
     public void delete(Invitations invitations){
         invitationsRepository.delete(invitations);
     }
+
+    public Boolean checkUser(String login, String journalName){
+        return !invitationsRepository.existsByIdUserAndIdJournal(usersRepository.findByLogin(login), journalRepository.findByName(journalName));
+    }
 }
