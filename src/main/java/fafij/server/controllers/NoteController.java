@@ -53,9 +53,8 @@ public class NoteController {
     @PostMapping("/listNote")
     public @ResponseBody
     List<NoteDTO> listNote(@RequestBody JournalName journalName){
-        Journal journal = journalService.findByName(journalName.getJournalName());
         NoteDTO noteDTO = new NoteDTO();
-        return noteDTO.getNoteDTOList(journal.getIdNote());
+        return noteDTO.getNoteDTOList(noteService.findAllByIdJournalOrderByDate(journalName.getJournalName()));
     }
 
     @PostMapping("/updateNote")
