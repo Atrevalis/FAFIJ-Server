@@ -23,7 +23,7 @@ public class NoteDTO {
     private CategoryDTO idCtgr;
     private String comment;
 
-    SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+    SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
     @Transactional
     public List<NoteDTO> getNoteDTOList(List<Note> noteList){
