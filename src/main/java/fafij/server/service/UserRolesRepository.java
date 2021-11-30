@@ -22,6 +22,8 @@ public interface UserRolesRepository extends JpaRepository<UserRoles, UserRolesI
 
     List<UserRoles> findAllByIdJournal(Journal jrnl);
 
+    Boolean existsByIdUserAndAndIdJournal(Users users, Journal journal);
+
     @Modifying
     @Query(value = "insert into user_roles values(:id_user, :id_jrnl, :id_role)", nativeQuery = true)
     @Transactional
