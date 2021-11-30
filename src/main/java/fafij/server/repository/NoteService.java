@@ -28,7 +28,7 @@ public class NoteService {
     }
 
     public void createNote(String date, Long sum, String category, String comment, String journal) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Date dates = format.parse(date);
         Note note = new Note();
         note.setDate(dates);
@@ -45,7 +45,7 @@ public class NoteService {
     }
 
     public void updateNote(Long id, String date, Long sum, String category, String comment) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Date dates = format.parse(date);
         Note note = noteRepository.findById(id).get();
         note.setDate(dates);
