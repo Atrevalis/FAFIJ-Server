@@ -59,4 +59,8 @@ public class UserService implements UserDetailsService {
         }
         return new org.springframework.security.core.userdetails.User(u.getLogin(), u.getPassword(), true, true, true, true, new HashSet<>());
     }
+
+    public Boolean existsUser(String login){
+        return usersRepository.existsByLogin(login);
+    }
 }

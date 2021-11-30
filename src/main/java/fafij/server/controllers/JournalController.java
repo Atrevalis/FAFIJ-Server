@@ -42,16 +42,24 @@ public class JournalController {
     @PostMapping("/addUser")
     public void addUser(@RequestBody AddUser addUser, HttpServletResponse response){
         try {
-            if(userRolesService.checkUser(addUser.getLogin(), addUser.getJournalName()) && invitationsService.checkUser(addUser.getLogin(), addUser.getJournalName())){
-                Long idRole = userRolesService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName()).getIdRole().getId();
-                if(idRole == 1){
-                    invitationsService.addInvitation(addUser.getLogin(), addUser.getJournalName(), addUser.getRole());
-                    response.setStatus(HttpServletResponse.SC_CREATED);
+            if(userService.existsUser(addUser.getLogin())){
+                if(userRolesService.checkUser(addUser.getLogin(), addUser.getJournalName())){
+                    if(invitationsService.checkUser(addUser.getLogin(), addUser.getJournalName())){
+                        Long idRole = userRolesService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName()).getIdRole().getId();
+                        if(idRole == 1){
+                            invitationsService.addInvitation(addUser.getLogin(), addUser.getJournalName(), addUser.getRole());
+                            response.setStatus(HttpServletResponse.SC_CREATED);
+                        }else{
+                            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                        }
+                    }else{
+                        response.setStatus(HttpServletResponse.SC_SEE_OTHER);
+                    }
                 }else{
-                    response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                    response.setStatus(HttpServletResponse.SC_CONFLICT);
                 }
             }else{
-                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
         }catch (Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
