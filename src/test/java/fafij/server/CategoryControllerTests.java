@@ -95,7 +95,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     public void CreateCategoryTest(long role) throws Exception {
         userRoles.getIdRole().setId(role);
         when(userRolesService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
-        when(categoryService.checkCategory(categoryBody.getCategory(), categoryBody.getJournalName()));
+        when(categoryService.checkCategory(categoryBody.getCategory(), categoryBody.getJournalName())).thenReturn(true);
           ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
