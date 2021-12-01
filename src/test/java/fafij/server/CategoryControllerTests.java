@@ -1,66 +1,76 @@
 package fafij.server;
 
-import fafij.server.controllers.AuthenticationController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import fafij.server.entity.Category;
 import fafij.server.entity.Roles;
 import fafij.server.entity.UserRoles;
 import fafij.server.repository.CategoryService;
 import fafij.server.repository.UserRolesService;
+import fafij.server.requestbodies.CategoryBody;
+import fafij.server.requestbodies.JournalName;
 import fafij.server.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import java.util.ArrayList;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
 import java.util.Arrays;
 import java.util.List;
 
-
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-    @WebMvcTest(AuthenticationController.class)
-    @SpringBootTest
-    @AutoConfigureMockMvc
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
     public class CategoryControllerTests {
 
-    final String category = "Food";
-    final String login = "ilya";
-    final String journalName = "ilyaJournal";
-    final Long id = 1L;
-    Category categoryClass;
-    UserRoles userRoles;
-    Roles roles;
+    private final String category = "Food";
+    private final String login = "ilya";
+    private final String journal = "Journal";
+    private Category categoryClass;
+    private UserRoles userRoles;
+    private CategoryBody categoryBody;
+    private JournalName journalName;
+    private MockMvc mvc;
+    private String path = "/private";
 
         @Autowired
-        private MockMvc mvc;
+        WebApplicationContext webApplicationContext;
 
         @MockBean
+        @Qualifier("category")
         private CategoryService categoryService;
 
         @MockBean
-        UserRolesService userRolesService;
+        @Qualifier("userRoles")
+        private UserRolesService userRolesService;
 
         @BeforeEach
         public void SetUp(){
-            roles = new Roles();
+            Roles roles = new Roles();
             userRoles = new UserRoles();
             userRoles.setIdRole(roles);
+            categoryBody = new CategoryBody(category, login, journal);
+            mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         }
 
-    /*@Test
+   /*@Test
     public void getFindAllNoteFromJournalTest()
     throws Exception {
 
@@ -68,23 +78,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         List<String> strings = Arrays.asList(journalSat);
 
-        given(categoryService.findAllByIdJournal("0")).willReturn(strings);
+        when(categoryService.findAllByIdJournal("69")).thenReturn(strings);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString();
 
-      *//* mvc.perform(get("/api/employees")
-                .contentType(MediaType.ALL))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].name", is(alex.getName()))); *//*
-        }
+        mvc.perform(post(path+"/listCategory")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isOk());
+    }*/
 
     @ParameterizedTest
     @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
     public void CreateCategoryTest(long role) throws Exception {
         userRoles.getIdRole().setId(role);
-        given(userRolesService.findByUserAndJournal(login, journalName)).willReturn(userRoles);
+        when(userRolesService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
+        when(categoryService.checkCategory(categoryBody.getCategory(), categoryBody.getJournalName()));
+          ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(get("/addCategory")
-                .contentType(MediaType.ALL))
+        mvc.perform(post(path+"/addCategory").contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
                 .andExpect(status().isCreated());
     }
 
@@ -92,9 +110,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     public void CreateCategoryTestAsKid() throws Exception {
 
         userRoles.getIdRole().setId(Constants.KidRole);
-        given(userRolesService.findByUserAndJournal(login, journalName)).willReturn(userRoles);
+        given(userRolesService.findByUserAndJournal(login, journal)).willReturn(userRoles);
 
-        mvc.perform(get("/addCategory")
+        mvc.perform(post("/addCategory")
                 .contentType(MediaType.ALL))
                 .andExpect(status().isNotAcceptable());
     }
@@ -103,21 +121,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     public void CreateCategoryTestWithError() throws Exception {
 
         userRoles.getIdRole().setId(Constants.KidRole);
-        given(userRolesService.findByUserAndJournal(login, journalName)).willThrow(new IllegalStateException("Error occurred"));
+        when(categoryService.checkCategory(categoryBody.getCategory(),categoryBody.getJournalName())).thenThrow(new Exception("Error occurred"));
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(get("/addCategory")
-                .contentType(MediaType.ALL))
+        mvc.perform(post("/private/addCategory").contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
                 .andExpect(status().isInternalServerError());
     }
 
     @ParameterizedTest
     @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
     public void DeleteCategoryTest(long role) throws Exception {
+            categoryBody = new CategoryBody(category, login, journal);
         userRoles.getIdRole().setId(role);
-        given(userRolesService.findByUserAndJournal(login, journalName)).willReturn(userRoles);
-        given(categoryService.findByNameAndIdJournal(category, journalName)).willReturn(categoryClass);
+        when(userRolesService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
+        when(categoryService.findByNameAndIdJournal(categoryBody.getCategory(), categoryBody.getJournalName())).thenReturn(categoryClass);
 
-        mvc.perform(post("/deleteCategory")
+        this.mvc.perform(post(path+"/deleteCategory")
+                .content(String.valueOf(categoryBody))
                 .contentType(MediaType.ALL))
                 .andExpect(status().isCreated());
     }
@@ -126,8 +150,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     public void DeleteCategoryTestAsKid() throws Exception {
 
         userRoles.getIdRole().setId(Constants.KidRole);
-        given(userRolesService.findByUserAndJournal(login, journalName)).willReturn(userRoles);
-        given(categoryService.findByNameAndIdJournal(category, journalName)).willReturn(categoryClass);
+        given(userRolesService.findByUserAndJournal(login, journal)).willReturn(userRoles);
+        given(categoryService.findByNameAndIdJournal(category, journal)).willReturn(categoryClass);
 
         mvc.perform(post("/deleteCategory")
                 .contentType(MediaType.ALL))
@@ -138,11 +162,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     public void DeleteCategoryTestWithError() throws Exception {
 
         userRoles.getIdRole().setId(Constants.KidRole);
-        given(userRolesService.findByUserAndJournal(login, journalName)).willThrow(new IllegalStateException("Error occurred"));
-        given(categoryService.findByNameAndIdJournal(category, journalName)).willThrow(new IllegalStateException("Error occurred"));
+        when(userRolesService.findByUserAndJournal(login, journal)).thenThrow(new IllegalStateException("Error occurred"));
+        when(categoryService.findByNameAndIdJournal(category, journal)).thenThrow(new IllegalStateException("Error occurred"));
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(post("/deleteCategory")
-                .contentType(MediaType.ALL))
-                .andExpect(status().isCreated());
-    }*/
+        mvc.perform(post("/private/addCategory")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(String.valueOf(categoryBody)))
+                .andExpect(status().isInternalServerError());
+    }
 }
