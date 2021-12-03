@@ -1,10 +1,7 @@
 package fafij.server.controllers;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import fafij.server.dto.InvitationsDTO;
 import fafij.server.entity.Invitations;
-import fafij.server.repository.InvitationsService;
-import fafij.server.repository.UserRolesService;
 import fafij.server.repository.UserService;
 import fafij.server.dto.JournalDTO;
 import fafij.server.entity.Users;
@@ -21,10 +18,6 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private InvitationsService invitationsService;
-    @Autowired
-    private UserRolesService userRolesService;
 
     @PostMapping("/registration")
     public void registration(@RequestBody Users user, HttpServletResponse response) {
@@ -54,12 +47,12 @@ public class UserController {
     @PostMapping("/private/accept")
     public void accept(@RequestBody Accept accept, HttpServletResponse response){
         try{
-            Invitations invitations = invitationsService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
+            Invitations invitations = userService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
             String user = invitations.getIdUser().getLogin();
             String journal = invitations.getIdJournal().getName();
             String role = invitations.getIdRole().getRoleName();
-            userRolesService.setUserRoles(user, journal, role);
-            invitationsService.updateStatus(invitations);
+            userService.setUserRoles(user, journal, role);
+            userService.updateStatus(invitations);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch(Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -69,8 +62,8 @@ public class UserController {
     @PostMapping("/private/decline")
     public void decline(@RequestBody Accept accept, HttpServletResponse response){
         try{
-            Invitations invitations = invitationsService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
-            invitationsService.delete(invitations);
+            Invitations invitations = userService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
+            userService.delete(invitations);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch(Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

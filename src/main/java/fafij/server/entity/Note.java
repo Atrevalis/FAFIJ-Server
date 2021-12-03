@@ -136,9 +136,17 @@ public class Note {
             return false;
         return true;
     }
+
     @Override
     public String toString() {
-        return "Note [id=" + id + ", category ID=" + idCtgr + ", sum=" + sum + ", date=" + date + ", comment=" + comment + ", journal ID=" + idJournal + "]";
+        return "Note{" +
+                "id=" + id +
+                ", date=" + date +
+                ", sum=" + sum +
+                ", idCtgr=" + idCtgr +
+                ", idJournal=" + idJournal +
+                ", comment='" + comment + '\'' +
+                '}';
     }
 
     public Note() {
