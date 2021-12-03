@@ -2,6 +2,7 @@ package fafij.server.controllers;
 import fafij.server.repository.*;
 import fafij.server.requestbodies.AddUser;
 import fafij.server.requestbodies.CreateJournal;
+import fafij.server.requestbodies.LoginJournal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -55,5 +56,10 @@ public class JournalController {
         }catch (Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/userRole")
+    public @ResponseBody Long userRole(@RequestBody LoginJournal loginJournal){
+        return journalService.findByUserAndJournal(loginJournal.getLogin(), loginJournal.getJournalName()).getIdRole().getId();
     }
 }
