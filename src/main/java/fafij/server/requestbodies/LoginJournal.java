@@ -1,6 +1,6 @@
 package fafij.server.requestbodies;
 
-public class Accept {
+public class LoginJournal {
     private String login;
     private String journalName;
 
@@ -20,7 +20,7 @@ public class Accept {
         this.journalName = journalName;
     }
 
-    public Accept(String login, String journalName) {
+    public LoginJournal(String login, String journalName) {
         this.login = login;
         this.journalName = journalName;
     }
