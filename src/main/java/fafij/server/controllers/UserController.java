@@ -5,7 +5,7 @@ import fafij.server.entity.Invitations;
 import fafij.server.repository.UserService;
 import fafij.server.dto.JournalDTO;
 import fafij.server.entity.Users;
-import fafij.server.requestbodies.Accept;
+import fafij.server.requestbodies.LoginJournal;
 import fafij.server.requestbodies.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,9 +45,9 @@ public class UserController {
     }
 
     @PostMapping("/private/accept")
-    public void accept(@RequestBody Accept accept, HttpServletResponse response){
+    public void accept(@RequestBody LoginJournal loginJournal, HttpServletResponse response){
         try{
-            Invitations invitations = userService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
+            Invitations invitations = userService.findByUserAndJournalAndAccept(loginJournal.getLogin(), loginJournal.getJournalName());
             String user = invitations.getIdUser().getLogin();
             String journal = invitations.getIdJournal().getName();
             String role = invitations.getIdRole().getRoleName();
@@ -60,9 +60,9 @@ public class UserController {
     }
 
     @PostMapping("/private/decline")
-    public void decline(@RequestBody Accept accept, HttpServletResponse response){
+    public void decline(@RequestBody LoginJournal loginJournal, HttpServletResponse response){
         try{
-            Invitations invitations = userService.findByUserAndJournalAndAccept(accept.getLogin(), accept.getJournalName());
+            Invitations invitations = userService.findByUserAndJournalAndAccept(loginJournal.getLogin(), loginJournal.getJournalName());
             userService.delete(invitations);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch(Exception e){
