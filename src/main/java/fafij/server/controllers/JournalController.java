@@ -3,7 +3,6 @@ import fafij.server.repository.*;
 import fafij.server.requestbodies.AddUser;
 import fafij.server.requestbodies.CreateJournal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 public class JournalController {
     @Autowired
     private JournalService journalService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRolesService userRolesService;
-    @Autowired
-    private RolesService roleService;
-    @Autowired
-    private InvitationsService invitationsService;
 
     @PostMapping("/createJournal")
     public void createJournal(@RequestBody CreateJournal createJournal, HttpServletResponse response){
@@ -29,7 +20,7 @@ public class JournalController {
             if(journalService.existsByNAme(createJournal.getJournalName())){
                 journalService.createJournal(createJournal.getJournalName());
                 String role = "ADMIN";
-                userRolesService.setUserRoles(createJournal.getLogin(), createJournal.getJournalName(), role);
+                journalService.setUserRoles(createJournal.getLogin(), createJournal.getJournalName(), role);
                 response.setStatus(HttpServletResponse.SC_CREATED);
             }else{
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
@@ -42,12 +33,12 @@ public class JournalController {
     @PostMapping("/addUser")
     public void addUser(@RequestBody AddUser addUser, HttpServletResponse response){
         try {
-            if(userService.existsUser(addUser.getLogin())){
-                if(userRolesService.checkUser(addUser.getLogin(), addUser.getJournalName())){
-                    if(invitationsService.checkUser(addUser.getLogin(), addUser.getJournalName())){
-                        Long idRole = userRolesService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName()).getIdRole().getId();
+            if(journalService.existsUser(addUser.getLogin())){
+                if(journalService.checkUserRole(addUser.getLogin(), addUser.getJournalName())){
+                    if(journalService.checkUserInvite(addUser.getLogin(), addUser.getJournalName())){
+                        Long idRole = journalService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName()).getIdRole().getId();
                         if(idRole == 1){
-                            invitationsService.addInvitation(addUser.getLogin(), addUser.getJournalName(), addUser.getRole());
+                            journalService.addInvitation(addUser.getLogin(), addUser.getJournalName(), addUser.getRole());
                             response.setStatus(HttpServletResponse.SC_CREATED);
                         }else{
                             response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
