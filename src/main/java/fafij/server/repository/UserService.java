@@ -1,10 +1,9 @@
 package fafij.server.repository;
+import fafij.server.entity.Invitations;
 import fafij.server.entity.Journal;
 import fafij.server.entity.Roles;
 import fafij.server.entity.Users;
-import fafij.server.service.JournalRepository;
-import fafij.server.service.RolesRepository;
-import fafij.server.service.UsersRepository;
+import fafij.server.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +25,10 @@ public class UserService implements UserDetailsService {
     private JournalRepository journalRepository;
     @Autowired
     private RolesRepository rolesRepository;
+    @Autowired
+    private InvitationsRepository invitationsRepository;
+    @Autowired
+    private UserRolesRepository userRolesRepository;
 
     public UserService(UsersRepository usersRepository){
         this.usersRepository = usersRepository;
@@ -62,5 +65,27 @@ public class UserService implements UserDetailsService {
 
     public Boolean existsUser(String login){
         return usersRepository.existsByLogin(login);
+    }
+
+    public Invitations findByUserAndJournalAndAccept(String login, String journalName){
+        Users user = usersRepository.findByLogin(login);
+        Journal journal = journalRepository.findByName(journalName);
+        return invitationsRepository.findByIdUserAndIdJournalAndAccepted(user, journal, false);
+    }
+
+    public void setUserRoles(String user, String journal, String role){
+        Long id_user = usersRepository.findByLogin(user).getId();
+        Long id_jrnl = journalRepository.findByName(journal).getId();
+        Long id_role = rolesRepository.findByRoleName(role).getId();
+        userRolesRepository.setUserRoles(id_user, id_jrnl, id_role);
+    }
+
+    public void updateStatus(Invitations invitations){
+        invitations.setAccepted(true);
+        invitationsRepository.save(invitations);
+    }
+
+    public void delete(Invitations invitations){
+        invitationsRepository.delete(invitations);
     }
 }

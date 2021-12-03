@@ -1,10 +1,6 @@
 package fafij.server.repository;
-import fafij.server.entity.Category;
-import fafij.server.entity.Journal;
-import fafij.server.entity.Note;
-import fafij.server.service.CategoryRepository;
-import fafij.server.service.JournalRepository;
-import fafij.server.service.NoteRepository;
+import fafij.server.entity.*;
+import fafij.server.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +18,10 @@ public class NoteService {
     private JournalRepository journalRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private UserRolesRepository userRolesRepository;
+    @Autowired
+    private UsersRepository usersRepository;
 
     public NoteService(NoteRepository noteRepository){
         this.noteRepository = noteRepository;
@@ -50,7 +50,7 @@ public class NoteService {
         Note note = noteRepository.findById(id).get();
         note.setDate(dates);
         note.setSum(sum);
-        note.setIdCtgr(categoryRepository.findByName(category));
+        note.setIdCtgr(categoryRepository.findByNameAndIdJournal(category,noteRepository.findById(id).get().getIdJournal()));
         note.setComment(comment);
         noteRepository.save(note);
     }
@@ -68,5 +68,11 @@ public class NoteService {
 
     public List<Note> findAllByIdJournalOrderByDate(String journalName){
         return noteRepository.findAllByIdJournalOrderByDateDesc(journalRepository.findByName(journalName));
+    }
+
+    public UserRoles findByUserAndJournal(String user, String journal){
+        Users users = usersRepository.findByLogin(user);
+        Journal jrnl = journalRepository.findByName(journal);
+        return userRolesRepository.findByIdUserAndIdJournal(users, jrnl);
     }
 }
