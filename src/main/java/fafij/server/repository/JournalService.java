@@ -75,6 +75,10 @@ public class JournalService {
         return !invitationsRepository.existsByIdUserAndIdJournal(usersRepository.findByLogin(login), journalRepository.findByName(journalName));
     }
 
+    public Boolean checkUserDecline(String login, String journalName){
+        return !invitationsRepository.existsByIdUserAndIdJournalAndDeclined(usersRepository.findByLogin(login), journalRepository.findByName(journalName), true);
+    }
+
     public UserRoles findByUserAndJournal(String user, String journal){
         Users users = usersRepository.findByLogin(user);
         Journal jrnl = journalRepository.findByName(journal);
