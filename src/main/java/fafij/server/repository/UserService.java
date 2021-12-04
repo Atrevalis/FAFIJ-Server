@@ -67,10 +67,10 @@ public class UserService implements UserDetailsService {
         return usersRepository.existsByLogin(login);
     }
 
-    public Invitations findByUserAndJournalAndAccept(String login, String journalName){
+    public Invitations findByUserAndJournalAndAcceptAndDeclined(String login, String journalName){
         Users user = usersRepository.findByLogin(login);
         Journal journal = journalRepository.findByName(journalName);
-        return invitationsRepository.findByIdUserAndIdJournalAndAccepted(user, journal, false);
+        return invitationsRepository.findByIdUserAndIdJournalAndAcceptedAndDeclined(user, journal, false, false);
     }
 
     public void setUserRoles(String user, String journal, String role){
@@ -80,12 +80,13 @@ public class UserService implements UserDetailsService {
         userRolesRepository.setUserRoles(id_user, id_jrnl, id_role);
     }
 
-    public void updateStatus(Invitations invitations){
+    public void updateAccept(Invitations invitations){
         invitations.setAccepted(true);
         invitationsRepository.save(invitations);
     }
 
-    public void delete(Invitations invitations){
-        invitationsRepository.delete(invitations);
+    public void updateDecline(Invitations invitations){
+        invitations.setDeclined(true);
+        invitationsRepository.save(invitations);
     }
 }

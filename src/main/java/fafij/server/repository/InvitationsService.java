@@ -34,10 +34,10 @@ public class InvitationsService {
         invitationsRepository.addInvitation(id_user, id_jrnl, id_role);
     }
 
-    public Invitations findByUserAndJournalAndAccept(String login, String journalName){
+    public Invitations findByUserAndJournalAndAcceptAndDeclined(String login, String journalName){
         Users user = usersRepository.findByLogin(login);
         Journal journal = journalRepository.findByName(journalName);
-        return invitationsRepository.findByIdUserAndIdJournalAndAccepted(user, journal, false);
+        return invitationsRepository.findByIdUserAndIdJournalAndAcceptedAndDeclined(user, journal, false, false);
     }
 
     public void updateStatus(Invitations invitations){
