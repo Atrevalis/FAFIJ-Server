@@ -37,12 +37,16 @@ public class JournalController {
             if(journalService.existsUser(addUser.getLogin())){
                 if(journalService.checkUserRole(addUser.getLogin(), addUser.getJournalName())){
                     if(journalService.checkUserInvite(addUser.getLogin(), addUser.getJournalName())){
-                        Long idRole = journalService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName()).getIdRole().getId();
-                        if(idRole == 1){
-                            journalService.addInvitation(addUser.getLogin(), addUser.getJournalName(), addUser.getRole());
-                            response.setStatus(HttpServletResponse.SC_CREATED);
+                        if(journalService.checkUserDecline(addUser.getLogin(), addUser.getJournalName())){
+                            Long idRole = journalService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName()).getIdRole().getId();
+                            if(idRole == 1){
+                                journalService.addInvitation(addUser.getLogin(), addUser.getJournalName(), addUser.getRole());
+                                response.setStatus(HttpServletResponse.SC_CREATED);
+                            }else{
+                                response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                            }
                         }else{
-                            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                            response.setStatus(HttpServletResponse.SC_SEE_OTHER);
                         }
                     }else{
                         response.setStatus(HttpServletResponse.SC_SEE_OTHER);
@@ -59,7 +63,7 @@ public class JournalController {
     }
 
     @PostMapping("/userRole")
-    public @ResponseBody Long userRole(@RequestBody LoginJournal loginJournal){
-        return journalService.findByUserAndJournal(loginJournal.getLogin(), loginJournal.getJournalName()).getIdRole().getId();
+    public @ResponseBody String userRole(@RequestBody LoginJournal loginJournal){
+        return journalService.findByUserAndJournal(loginJournal.getLogin(), loginJournal.getJournalName()).getIdRole().getId().toString();
     }
 }

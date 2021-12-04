@@ -47,12 +47,12 @@ public class UserController {
     @PostMapping("/private/accept")
     public void accept(@RequestBody LoginJournal loginJournal, HttpServletResponse response){
         try{
-            Invitations invitations = userService.findByUserAndJournalAndAccept(loginJournal.getLogin(), loginJournal.getJournalName());
+            Invitations invitations = userService.findByUserAndJournalAndAcceptAndDeclined(loginJournal.getLogin(), loginJournal.getJournalName());
             String user = invitations.getIdUser().getLogin();
             String journal = invitations.getIdJournal().getName();
             String role = invitations.getIdRole().getRoleName();
             userService.setUserRoles(user, journal, role);
-            userService.updateStatus(invitations);
+            userService.updateAccept(invitations);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch(Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -62,8 +62,8 @@ public class UserController {
     @PostMapping("/private/decline")
     public void decline(@RequestBody LoginJournal loginJournal, HttpServletResponse response){
         try{
-            Invitations invitations = userService.findByUserAndJournalAndAccept(loginJournal.getLogin(), loginJournal.getJournalName());
-            userService.delete(invitations);
+            Invitations invitations = userService.findByUserAndJournalAndAcceptAndDeclined(loginJournal.getLogin(), loginJournal.getJournalName());
+            userService.updateDecline(invitations);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch(Exception e){
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

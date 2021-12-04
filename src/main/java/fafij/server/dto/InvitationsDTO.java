@@ -26,7 +26,7 @@ public class InvitationsDTO {
         List<InvitationsDTO> invitationsDTOList = new ArrayList<>();
 
         for(Invitations invitations : invitationsList){
-            if(!invitations.getAccepted()){
+            if(!invitations.getAccepted() && !invitations.getDeclined()){
                 journal = new JournalDTO();
                 idRole = new RoleDTO();
                 InvitationsDTO invitationsDTO = new InvitationsDTO();
