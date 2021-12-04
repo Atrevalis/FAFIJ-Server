@@ -29,6 +29,9 @@ public class Invitations {
     @Column(name = "accepted", columnDefinition = "boolean default false")
     private Boolean accepted;
 
+    @Column(name = "declined", columnDefinition = "boolean default false")
+    private Boolean declined;
+
     public Long getId() {
         return id;
     }
@@ -71,17 +74,25 @@ public class Invitations {
         this.accepted = accepted;
     }
 
+    public Boolean getDeclined() {
+        return declined;
+    }
+
+    public void setDeclined(Boolean declined) {
+        this.declined = declined;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Invitations that = (Invitations) o;
-        return Objects.equals(id, that.id) && Objects.equals(idUser, that.idUser) && Objects.equals(idJournal, that.idJournal) && Objects.equals(idRole, that.idRole) && Objects.equals(accepted, that.accepted);
+        return Objects.equals(id, that.id) && Objects.equals(idUser, that.idUser) && Objects.equals(idJournal, that.idJournal) && Objects.equals(idRole, that.idRole) && Objects.equals(accepted, that.accepted) && Objects.equals(declined, that.declined);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, idUser, idJournal, idRole, accepted);
+        return Objects.hash(id, idUser, idJournal, idRole, accepted, declined);
     }
 
     @Override
@@ -92,6 +103,7 @@ public class Invitations {
                 ", idJournal=" + idJournal +
                 ", idRole=" + idRole +
                 ", accepted=" + accepted +
+                ", declined=" + declined +
                 '}';
     }
 
