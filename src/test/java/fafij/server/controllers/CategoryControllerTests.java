@@ -1,4 +1,4 @@
-package fafij.server;
+package fafij.server.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;

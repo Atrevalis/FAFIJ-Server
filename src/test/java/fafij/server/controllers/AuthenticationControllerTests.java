@@ -1,4 +1,4 @@
-package fafij.server;
+package fafij.server.controllers;
 
 import fafij.server.controllers.AuthenticationController;
 import org.junit.jupiter.api.Test;
