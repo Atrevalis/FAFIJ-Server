@@ -110,6 +110,7 @@ public class JournalControllerTests {
         when(journalService.existsUser(addUser.getLogin())).thenReturn(true);
         when(journalService.checkUserRole(addUser.getLogin(), addUser.getJournalName())).thenReturn(true);
         when(journalService.checkUserInvite(addUser.getLogin(), addUser.getJournalName())).thenReturn(true);
+        when(journalService.checkUserDecline(addUser.getLogin(), addUser.getJournalName())).thenReturn(true);
         when(journalService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName())).thenReturn(userRoles);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -145,6 +146,7 @@ public class JournalControllerTests {
         when(journalService.existsUser(addUser.getLogin())).thenReturn(true);
         when(journalService.checkUserRole(addUser.getLogin(), addUser.getJournalName())).thenReturn(true);
         when(journalService.checkUserInvite(addUser.getLogin(), addUser.getJournalName())).thenReturn(true);
+        when(journalService.checkUserDecline(addUser.getLogin(), addUser.getJournalName())).thenReturn(true);
         when(journalService.findByUserAndJournal(addUser.getAdmin(), addUser.getJournalName())).thenReturn(userRoles);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -157,7 +159,7 @@ public class JournalControllerTests {
                 .andExpect(status().isNotAcceptable());
     }
     @Test
-    public void addUserTestSeeOther() throws Exception{
+    public void addUserTestWithoutInvite() throws Exception{
         userRoles.getIdRole().setId(Constants.AdminRole);
         when(journalService.existsUser(addUser.getLogin())).thenReturn(true);
         when(journalService.checkUserRole(addUser.getLogin(), addUser.getJournalName())).thenReturn(true);
@@ -173,6 +175,23 @@ public class JournalControllerTests {
                 .andExpect(status().isSeeOther());
     }
 
+    @Test
+    public void addUserTestDecline() throws Exception{
+        userRoles.getIdRole().setId(Constants.AdminRole);
+        when(journalService.existsUser(addUser.getLogin())).thenReturn(true);
+        when(journalService.checkUserRole(addUser.getLogin(), addUser.getJournalName())).thenReturn(true);
+        when(journalService.checkUserInvite(addUser.getLogin(), addUser.getJournalName())).thenReturn(true);
+        when(journalService.checkUserDecline(addUser.getLogin(), addUser.getJournalName())).thenReturn(false);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(addUser);
+
+        mvc.perform(post(path+addUserPath)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isSeeOther());
+    }
     @Test
     public void addUserTestNotFound() throws Exception{
         userRoles.getIdRole().setId(Constants.AdminRole);

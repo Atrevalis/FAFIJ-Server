@@ -5,12 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import fafij.server.dto.NoteDTO;
-import fafij.server.entity.Note;
-import fafij.server.entity.Roles;
-import fafij.server.entity.UserRoles;
+import fafij.server.entity.*;
 import fafij.server.repository.NoteService;
 import fafij.server.requestbodies.*;
 import fafij.server.utils.Constants;
+import fafij.server.utils.Converters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,6 +24,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,13 +46,15 @@ class NoteControllerTests {
     private JournalName journalName;
     private final String date = "2021-12-03T12:08:15.000+00:00";
     private final long sum = 2000;
-    private final String category = "Food";
+    private final String nameCategory = "Food";
+    private Category category;
     private final String comment = "comment";
     private MockMvc mvc;
     private final long idNote = 1;
     private final String login = "ilya";
     private UserRoles userRoles;
-    private final String journal = "Journal";
+    private final String nameJournal = "Journal";
+    private Journal journal;
     private final String listPath = "/listNote";
     private List<Note> listNote;
     private final int index = 1;
@@ -67,15 +69,28 @@ class NoteControllerTests {
     @MockBean
     private NoteService noteService;
 
+    NoteControllerTests() {
+    }
+
     @BeforeEach
-    public void setUp(){
+    public void setUp() throws ParseException {
+        category = new Category();
+        journal = new Journal();
         note = new Note();
-        updateNote = new UpdateNote(idNote,date,sum,category,comment,login);
+        note.setId(idNote);
+        note.setComment(comment);
+        note.setDate(Converters.stringToDate(date));
+        note.setIdCtgr(category);
+        note.setSum(sum);
+        note.setIdJournal(journal);
+
+        updateNote = new UpdateNote(idNote,date,sum, nameCategory,comment,login);
         Roles roles = new Roles();
         userRoles = new UserRoles();
         userRoles.setIdRole(roles);
-        deleteNote = new DeleteNote(idNote, login, journal);
-        addNote = new AddNote( date, sum, category, comment);
+        deleteNote = new DeleteNote(idNote, login, nameJournal);
+        addNote = new AddNote( date, sum, nameCategory, comment);
+        listNote.add(note);
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
@@ -91,7 +106,7 @@ class NoteControllerTests {
                 .content(requestJson))
                 .andExpect(status().isCreated());
     }
-   /* @Test
+  /*  @Test
     void createNoteTestExeption() throws Exception{
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -155,7 +170,6 @@ class NoteControllerTests {
 
     @Test
     void listNoteTest() throws Exception{
-        listNote.add(index, note);
         noteDTO.getNoteDTOList(listNote);
         when(noteService.findAllByIdJournalOrderByDate(journalName.getJournalName())).thenReturn(listNote);
 
@@ -163,6 +177,7 @@ class NoteControllerTests {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(deleteNote);
+
 
         mvc.perform(post(path+listPath)
                 .contentType(MediaType.APPLICATION_JSON)
