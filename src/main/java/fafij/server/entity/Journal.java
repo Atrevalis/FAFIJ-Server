@@ -120,4 +120,14 @@ public class Journal {
     public Journal() {
 
     }
+
+    public Journal(Long id, String name, List<Users> user, List<Roles> role, List<Note> idNote, List<Invitations> idInvitations, List<Category> idCategory) {
+        this.id = id;
+        this.name = name;
+        this.user = user;
+        this.role = role;
+        this.idNote = idNote;
+        this.idInvitations = idInvitations;
+        this.idCategory = idCategory;
+    }
 }

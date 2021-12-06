@@ -109,4 +109,13 @@ public class Invitations {
 
     public Invitations() {
     }
+
+    public Invitations(Long id, Users idUser, Journal idJournal, Roles idRole, Boolean accepted, Boolean declined) {
+        this.id = id;
+        this.idUser = idUser;
+        this.idJournal = idJournal;
+        this.idRole = idRole;
+        this.accepted = accepted;
+        this.declined = declined;
+    }
 }

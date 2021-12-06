@@ -150,6 +150,14 @@ public class Note {
     }
 
     public Note() {
+    }
 
+    public Note(Long id, Date date, Long sum, Category idCtgr, Journal idJournal, String comment) {
+        this.id = id;
+        this.date = date;
+        this.sum = sum;
+        this.idCtgr = idCtgr;
+        this.idJournal = idJournal;
+        this.comment = comment;
     }
 }

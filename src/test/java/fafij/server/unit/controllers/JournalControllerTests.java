@@ -1,4 +1,4 @@
-package fafij.server.controllers;
+package fafij.server.unit.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -242,5 +242,4 @@ public class JournalControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson));
     }
-
 }

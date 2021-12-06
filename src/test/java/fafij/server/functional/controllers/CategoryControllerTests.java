@@ -1,4 +1,4 @@
-package fafij.server.controllers;
+package fafij.server.functional.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,8 +17,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -33,6 +34,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/applicationTest.properties")
+@Sql(value = {"runUpDB.sql"},executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"clearDB.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @AutoConfigureMockMvc
 public class CategoryControllerTests {
 
@@ -50,7 +54,7 @@ public class CategoryControllerTests {
     @Autowired
     WebApplicationContext webApplicationContext;
 
-    @MockBean
+    @Autowired
     private CategoryService categoryService;
 
     @BeforeEach

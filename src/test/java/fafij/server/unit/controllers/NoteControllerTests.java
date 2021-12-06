@@ -1,4 +1,4 @@
-package fafij.server.controllers;
+package fafij.server.unit.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +45,7 @@ class NoteControllerTests {
     private AddNote addNote;
     private DeleteNote deleteNote;
     private JournalName journalName;
-    private final String date = "2021-12-03T12:08:15.000+00:00";
+    private final String date = "06.12.2022 19:33:00";
     private final long sum = 2000;
     private final String nameCategory = "Food";
     private Category category;
@@ -69,28 +70,19 @@ class NoteControllerTests {
     @MockBean
     private NoteService noteService;
 
-    NoteControllerTests() {
-    }
-
     @BeforeEach
-    public void setUp() throws ParseException {
+    public void setUp() throws Exception {
+        journalName = new JournalName(nameJournal);
+
         category = new Category();
         journal = new Journal();
-        note = new Note();
-        note.setId(idNote);
-        note.setComment(comment);
-        note.setDate(Converters.stringToDate(date));
-        note.setIdCtgr(category);
-        note.setSum(sum);
-        note.setIdJournal(journal);
-
+        note = new Note(idNote,Converters.stringToDate(date),sum,category, journal,comment);
         updateNote = new UpdateNote(idNote,date,sum, nameCategory,comment,login);
         Roles roles = new Roles();
         userRoles = new UserRoles();
         userRoles.setIdRole(roles);
         deleteNote = new DeleteNote(idNote, login, nameJournal);
         addNote = new AddNote( date, sum, nameCategory, comment);
-        listNote.add(note);
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
@@ -106,18 +98,21 @@ class NoteControllerTests {
                 .content(requestJson))
                 .andExpect(status().isCreated());
     }
-  /*  @Test
-    void createNoteTestExeption() throws Exception{
+
+ /*   @Test
+    void createNoteTestException() throws Exception{
+        when(noteService.createNote(addNote.getDate(), addNote.getSum(), addNote.getCategory(), addNote.getComment(), addNote.getJournalName()))
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(null);
-
         mvc.perform(post(path+addPath)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isInternalServerError());
     }*/
+
    @ParameterizedTest
    @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
     void deleteNoteTest(long role) throws Exception{
@@ -170,25 +165,26 @@ class NoteControllerTests {
 
     @Test
     void listNoteTest() throws Exception{
-        noteDTO.getNoteDTOList(listNote);
-        when(noteService.findAllByIdJournalOrderByDate(journalName.getJournalName())).thenReturn(listNote);
+        listNote = new ArrayList<>();
+        listNote.add(note);
+        when(noteService.findAllByIdJournalOrderByDate(journalName.getJournalName())).thenReturn((List<Note>) listNote);
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson=ow.writeValueAsString(deleteNote);
-
+        String requestJson=ow.writeValueAsString(journalName);
 
         mvc.perform(post(path+listPath)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
-                .andExpect((ResultMatcher) noteDTO);
+                .andExpect((ResultMatcher) noteDTO.getNoteDTOList(listNote));
     }
 
     @Test
     void updateTest() throws Exception{
-        when(noteService.findByUserAndJournal(updateNote.getLogin(), noteService.findById(updateNote.getId()).get().getIdJournal().getName())).thenReturn(userRoles);
         when(noteService.findById(updateNote.getId())).thenReturn(optionalNote);
+        when(noteService.findByUserAndJournal(updateNote.getLogin(), noteService.findById(updateNote.getId()).get().getIdJournal().getName())).thenReturn(userRoles);
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
