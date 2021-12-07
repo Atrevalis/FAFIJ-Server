@@ -5,5 +5,5 @@ delete from note;
 delete from user_roles;
 delete from users;
 
-insert into users(password,login) values ('ilyaaaa','ilya')
+insert into users(password,login) values ('ilyaaaa','ilya');
 
