@@ -181,7 +181,7 @@ public class IntegrationalTests {
                 .andExpect(status().isOk());
       /*  //ask server about Journal list
         requestJson=ow.writeValueAsString(login);
-        result = mvc.perform(post(Constants.Path.privatePath+Constants.Path.userJournals)
+        result = mvc.performs(post(Constants.Path.privatePath+Constants.Path.userJournals)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andReturn();
@@ -203,12 +203,26 @@ public class IntegrationalTests {
         json = result.getResponse().getContentAsString();
         Type collectionType = new TypeToken<Collection<NoteDTOBean>>(){}.getType();
         List<NoteDTOBean> lcs = new Gson().fromJson( json , collectionType);
-        requestNote.setComment(lcs.get(0).comment);
-        requestNote.setDate(lcs.get(0).date);
-        requestNote.setIdCtgr(lcs.get(0).category);
-        requestNote.setSum(lcs.get(0).sum);
-        expectedNote.setId(lcs.get(0).id);
-        Assertions.assertEquals(expectedNote,requestNote, "Nodes are not equals");
+        boolean clone = false;
+        for(int i = 0; i<lcs.size(); i++) {
+            clone = Constants.UserDB.comment.equals(lcs.get(i).comment) &&
+                    Constants.UserDB.date == lcs.get(i).date &&
+                    Constants.UserDB.category.equals(lcs.get(i).category) &&
+                    Constants.UserDB.sum == lcs.get(i).sum &&
+                    Constants.UserDB.idNote == lcs.get(i).id;
+        }
+        Assertions.assertFalse(clone, "Note is not deleted");
+
+        //delete categories
+        requestJson=ow.writeValueAsString(journalName);
+        result = mvc.perform(post(Constants.Path.privatePath+Constants.Path.listNotePath)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andReturn();
+        json = result.getResponse().getContentAsString();
+        Type collectionType = new TypeToken<Collection<NoteDTOBean>>(){}.getType();
+        List<NoteDTOBean> lcs = new Gson().fromJson( json , collectionType);
+        //Assertions.assertEquals(expectedNote,requestNote, "Notes are not equals");
 
     }
 }
