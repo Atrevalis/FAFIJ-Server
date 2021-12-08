@@ -57,7 +57,7 @@ public class CategoryControllerTests {
         Roles roles = new Roles();
         userRoles = new UserRoles();
         userRoles.setIdRole(roles);
-        categoryBody = new CategoryBody(category, Constants.login, journal);
+        categoryBody = new CategoryBody(category, Constants.User.login, journal);
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
@@ -72,7 +72,7 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(journalSat);
 
-        mvc.perform(post(path+Constants.listCategoryPath)
+        mvc.perform(post(path+Constants.Path.listCategoryPath)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isOk());
@@ -89,7 +89,7 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(post(path+Constants.addCategoryPath).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(path+Constants.Path.addCategoryPath).contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isCreated());
     }
@@ -104,7 +104,7 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(MockMvcRequestBuilders.post(path+Constants.addCategoryPath).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(MockMvcRequestBuilders.post(path+Constants.Path.addCategoryPath).contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isNotAcceptable());
     }
@@ -120,7 +120,7 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(post(path+Constants.addCategoryPath).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(path+Constants.Path.addCategoryPath).contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isInternalServerError());
     }
@@ -128,7 +128,7 @@ public class CategoryControllerTests {
     @ParameterizedTest
     @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
     public void deleteCategoryTest(long role) throws Exception {
-        categoryBody = new CategoryBody(category, Constants.login, journal);
+        categoryBody = new CategoryBody(category, Constants.User.login, journal);
         userRoles.getIdRole().setId(role);
         when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
         when(categoryService.findByNameAndIdJournal(categoryBody.getCategory(), categoryBody.getJournalName())).thenReturn(categoryClass);
@@ -136,7 +136,7 @@ public class CategoryControllerTests {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
-        this.mvc.perform(post(path+Constants.deleteCategoryPath)
+        this.mvc.perform(post(path+Constants.Path.deleteCategoryPath)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -152,7 +152,7 @@ public class CategoryControllerTests {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
-        mvc.perform(post(path+Constants.deleteCategoryPath)
+        mvc.perform(post(path+Constants.Path.deleteCategoryPath)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotAcceptable());
@@ -170,7 +170,7 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(post(path+Constants.deleteCategoryPath)
+        mvc.perform(post(path+Constants.Path.deleteCategoryPath)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isInternalServerError());

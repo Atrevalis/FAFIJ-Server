@@ -71,7 +71,7 @@ class NoteControllerTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        journalName = new JournalName(Constants.journal);
+        journalName = new JournalName(Constants.User.journal);
 
         category = new Category();
         journal = new Journal();
@@ -80,8 +80,8 @@ class NoteControllerTests {
         Roles roles = new Roles();
         userRoles = new UserRoles();
         userRoles.setIdRole(roles);
-        deleteNote = new DeleteNote(idNote, login, Constants.journal);
-        addNote = new AddNote( date, sum, nameCategory, comment,Constants.journal);
+        deleteNote = new DeleteNote(idNote, login, Constants.User.journal);
+        addNote = new AddNote( date, sum, nameCategory, comment,Constants.User.journal);
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
