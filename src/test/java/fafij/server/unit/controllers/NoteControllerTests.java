@@ -54,7 +54,6 @@ class NoteControllerTests {
     private final long idNote = 1;
     private final String login = "ilya";
     private UserRoles userRoles;
-    private final String nameJournal = "Journal";
     private Journal journal;
     private final String listPath = "/listNote";
     private List<Note> listNote;
@@ -72,7 +71,7 @@ class NoteControllerTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        journalName = new JournalName(nameJournal);
+        journalName = new JournalName(Constants.journal);
 
         category = new Category();
         journal = new Journal();
@@ -81,8 +80,8 @@ class NoteControllerTests {
         Roles roles = new Roles();
         userRoles = new UserRoles();
         userRoles.setIdRole(roles);
-        deleteNote = new DeleteNote(idNote, login, nameJournal);
-        addNote = new AddNote( date, sum, nameCategory, comment);
+        deleteNote = new DeleteNote(idNote, login, Constants.journal);
+        addNote = new AddNote( date, sum, nameCategory, comment,Constants.journal);
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 

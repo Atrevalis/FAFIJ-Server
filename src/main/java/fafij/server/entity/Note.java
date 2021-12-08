@@ -32,6 +32,14 @@ public class Note {
     @Column(name="comment", nullable=false)
     private String comment;
 
+    public Note(Date date, Long sum, Category idCtgr, Journal idJournal, String comment) {
+        this.date = date;
+        this.sum = sum;
+        this.idCtgr = idCtgr;
+        this.idJournal = idJournal;
+        this.comment = comment;
+    }
+
     public Long getId() {
         return id;
     }
