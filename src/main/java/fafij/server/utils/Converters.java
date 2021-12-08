@@ -15,4 +15,8 @@ public class Converters {
     public static String dateToStrinng(Date date) throws ParseException{
         return format.format(date);
     }
+
+    /*public static T jsonToObject<T>(T obj){
+        return new Gson().fromJson(json, T);
+    }*/
 }

@@ -109,8 +109,7 @@ public class Users {
 
         }
 
-        public Users(Long id, String login, String password, List<Journal> journal, List<Roles> role, List<Invitations> idInvitations) {
-                this.id = id;
+        public Users( String login, String password, List<Journal> journal, List<Roles> role, List<Invitations> idInvitations) {
                 this.login = login;
                 this.password = password;
                 this.journal = journal;
