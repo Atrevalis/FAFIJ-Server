@@ -23,6 +23,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
@@ -34,9 +35,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
 @TestPropertySource("/applicationTest.properties")
-@Sql(value = {"runUpDB.sql"},executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = {"clearDB.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+//@Sql(value = {"runDumpDB.sql"},executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+//@Sql(value = {"clearDB.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @AutoConfigureMockMvc
 public class CategoryControllerTests {
 
@@ -70,8 +72,6 @@ public class CategoryControllerTests {
     public void getFindAllNoteFromJournalTest()
             throws Exception {
         List<String> strings = Arrays.asList(journalSat);
-
-        when(categoryService.findAllByIdJournal(journalId)).thenReturn(strings);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
@@ -87,8 +87,6 @@ public class CategoryControllerTests {
     @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
     public void CreateCategoryTest(long role) throws Exception {
         userRoles.getIdRole().setId(role);
-        when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
-        when(this.categoryService.checkCategory(categoryBody.getCategory(), categoryBody.getJournalName())).thenReturn(true);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
@@ -102,8 +100,6 @@ public class CategoryControllerTests {
     @Test
     public void CreateCategoryTestAsKid() throws Exception {
         userRoles.getIdRole().setId(Constants.KidRole);
-        when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
-        when(this.categoryService.checkCategory(categoryBody.getCategory(), categoryBody.getJournalName())).thenReturn(true);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
@@ -118,8 +114,6 @@ public class CategoryControllerTests {
     public void CreateCategoryTestWithError() throws Exception {
         Exception e = new RuntimeException();
         userRoles.getIdRole().setId(Constants.KidRole);
-        when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenThrow(e);
-        when(this.categoryService.checkCategory(categoryBody.getCategory(),categoryBody.getJournalName())).thenThrow(e);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
@@ -135,8 +129,6 @@ public class CategoryControllerTests {
     public void DeleteCategoryTest(long role) throws Exception {
         categoryBody = new CategoryBody(category, login, journal);
         userRoles.getIdRole().setId(role);
-        when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
-        when(categoryService.findByNameAndIdJournal(categoryBody.getCategory(), categoryBody.getJournalName())).thenReturn(categoryClass);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
@@ -151,8 +143,6 @@ public class CategoryControllerTests {
     public void DeleteCategoryTestAsKid() throws Exception {
 
         userRoles.getIdRole().setId(Constants.KidRole);
-        when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
-        when(categoryService.findByNameAndIdJournal(category, journal)).thenReturn(categoryClass);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
@@ -168,8 +158,6 @@ public class CategoryControllerTests {
     public void DeleteCategoryTestWithError(long role) throws Exception {
         Exception e = new RuntimeException();
         userRoles.getIdRole().setId(role);
-        when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenThrow(e);
-        when(categoryService.findByNameAndIdJournal(category, journal)).thenThrow(e);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
