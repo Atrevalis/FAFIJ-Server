@@ -67,4 +67,14 @@ public class JournalDTO {
     public void setRoles(List<Roles> roles) {
         this.roles = roles;
     }
+
+    public JournalDTO(String name, List<UsersDTO> user, List<Note> idNote, List<Roles> roles) {
+        this.name = name;
+        this.user = user;
+        this.idNote = idNote;
+        this.roles = roles;
+    }
+
+    public JournalDTO() {
+    }
 }

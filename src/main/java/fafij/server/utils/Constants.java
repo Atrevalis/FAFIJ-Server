@@ -17,12 +17,9 @@ public class Constants {
         public static final long sum = 2000;
     }
 
-    public class User2 {
-        public static final String category = "Goods";
+    public class NewNote {
+        public static final String category = "Food";
         public static final String comment = "Goods for me";
-        public static final String journal = "Oleg'sJournal";
-        public static final String login = "OlegChernovVitalievich";
-        public static final String password = "a62f68c86d10821d4518f990f2dd5cd1";
         public static final String date = "10.11.2025 20:00:00";
         public static final long sum = 5000;
     }
@@ -38,7 +35,6 @@ public class Constants {
         public static final long sum = -1999;
     }
 
-
     public class Path {
         public static final String deleteNotePath = "/deleteNote";
         public static final String listCategoryPath = "/listCategory";
@@ -50,8 +46,9 @@ public class Constants {
         public static final String registrationPath = "/registration";
         public static final String loginPath = "/login";
         public static final String addNotePath = "/addNote";
-        public static final String updatePath = "/updateNote";
-        public static final String deletePath = "/deleteNote";
-        public static final String userJournals = "/userJournals";
+        public static final String updateNotePath = "/updateNote";
+        public static final String userJournalsPath = "/userJournals";
+        public static final String invitationPath = "/invitations";
+        public static final String acceptPath = "/accept";
     }
 }

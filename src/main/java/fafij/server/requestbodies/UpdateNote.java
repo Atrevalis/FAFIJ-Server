@@ -64,6 +64,8 @@ public class UpdateNote {
         this.comment = comment;
         this.login = login;
     }
+
+    public UpdateNote(){}
 }
 
 
