@@ -26,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,10 +73,10 @@ class NoteControllerTests {
     @BeforeEach
     public void setUp() throws Exception {
         journalName = new JournalName(Constants.User.journal);
-
+        note = new Note(Converters.stringToDate(date), Constants.NewNote.sum, category, journal, Constants.NewNote.comment);
+        optionalNote = Optional.of(note);
         category = new Category();
         journal = new Journal();
-        note = new Note(idNote,Converters.stringToDate(date),sum,category, journal,comment);
         updateNote = new UpdateNote(idNote,date,sum, nameCategory,comment,login);
         Roles roles = new Roles();
         userRoles = new UserRoles();
@@ -97,20 +98,6 @@ class NoteControllerTests {
                 .content(requestJson))
                 .andExpect(status().isCreated());
     }
-
- /*   @Test
-    void createNoteTestException() throws Exception{
-        when(noteService.createNote(addNote.getDate(), addNote.getSum(), addNote.getCategory(), addNote.getComment(), addNote.getJournalName()))
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson=ow.writeValueAsString(null);
-        mvc.perform(post(path+addPath)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
-                .andExpect(status().isInternalServerError());
-    }*/
 
    @ParameterizedTest
    @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
@@ -160,38 +147,5 @@ class NoteControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isInternalServerError());
-    }
-
-    @Test
-    void listNoteTest() throws Exception{
-        listNote = new ArrayList<>();
-        listNote.add(note);
-        when(noteService.findAllByIdJournalOrderByDate(journalName.getJournalName())).thenReturn((List<Note>) listNote);
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson=ow.writeValueAsString(journalName);
-
-        mvc.perform(post(path+listPath)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
-                .andExpect((ResultMatcher) noteDTO.getNoteDTOList(listNote));
-    }
-
-    @Test
-    void updateTest() throws Exception{
-        when(noteService.findById(updateNote.getId())).thenReturn(optionalNote);
-        when(noteService.findByUserAndJournal(updateNote.getLogin(), noteService.findById(updateNote.getId()).get().getIdJournal().getName())).thenReturn(userRoles);
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson=ow.writeValueAsString(updateNote);
-
-        mvc.perform(post(path+updatePath)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
-                .andExpect(status().isOk());
     }
 }

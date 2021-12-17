@@ -12,7 +12,7 @@ public class Converters {
         return format.parse(date);
     }
 
-    public static String dateToStrinng(Date date) throws ParseException{
+    public static String dateToString(Date date) throws ParseException{
         return format.format(date);
     }
 }

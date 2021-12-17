@@ -199,16 +199,6 @@ public class IntegrationalTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isOk());
-
-      /*  //ask server about Journal list
-        requestJson=ow.writeValueAsString(login);
-        result = mvc.performs(post(Constants.Path.privatePath+Constants.Path.userJournals)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
-                .andReturn();
-        json = result.getResponse().getContentAsString();
-       */
-    //[{"journalName":"BatalinJournal","logins":[{"login":"AlexanderBatalin"}]}]
         //delete note
         requestJson=ow.writeValueAsString(deleteNote);
         mvc.perform(post(Constants.Path.privatePath+Constants.Path.deleteNotePath)
@@ -261,8 +251,8 @@ public class IntegrationalTests {
     }
 
     @Test
-    @DisplayName("Update note and invite member")
-    public void JoinJournalTest() throws Exception {
+    @DisplayName("Update note")
+    public void UpdateJournalTest() throws Exception {
         category.setName(Constants.NewNote.category);
         expectedNote.setComment(Constants.NewNote.comment);
         expectedNote.setDate(Constants.NewNote.date);
@@ -314,20 +304,5 @@ public class IntegrationalTests {
             }
         }
         Assertions.assertEquals(expectedNote,requestNote, "Note is not updated");
-
-        //invite member by host
-       /* invitations = new ArrayList<>();
-        users = new
-        journalDTO = new JournalDTO( Constants.UserDB.journal,  users,  idNote, roles);
-        invitationsDTO = new InvitationsDTO(journal, idRole, false);
-        invitations.add();
-        requestJson=ow.writeValueAsString();
-        result = mvc.perform(post(Constants.Path.privatePath+Constants.Path.invitationPath)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
-                .andReturn();
-        json = result.getResponse().getContentAsString();*/
-
     }
-
 }
