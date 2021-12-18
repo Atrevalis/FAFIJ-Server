@@ -1,4 +1,5 @@
 package fafij.server.controllers;
+import fafij.server.dto.CategoryDTO;
 import fafij.server.repository.CategoryService;
 import fafij.server.entity.Category;
 import fafij.server.requestbodies.CategoryBody;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 @RequestMapping("/private")
@@ -53,7 +55,8 @@ public class CategoryController {
 
     @PostMapping("/listCategory")
     public @ResponseBody
-    String findAll(@RequestBody JournalName journalName){
-        return this.categoryService.findAllByIdJournal(journalName.getJournalName()).toString();
+    List<CategoryDTO> findAll(@RequestBody JournalName journalName){
+        CategoryDTO categoryDTO = new CategoryDTO();
+        return categoryDTO.getCategoryDTOList(categoryService.findAllByIdJournal(journalName.getJournalName()));
     }
 }
