@@ -42,13 +42,8 @@ public class CategoryService {
     public List<Category> findAllByName(String name){
         return categoryRepository.findAllByName(name);
     }
-    public List<String> findAllByIdJournal(String journalName){
-        List<Category> category = categoryRepository.findAllByIdJournal(journalRepository.findByName(journalName));
-        List<String> string = new ArrayList<>();
-        for(int i=0; i<category.size(); i++){
-            string.add(category.get(i).getName());
-        }
-        return string;
+    public List<Category> findAllByIdJournal(String journalName){
+        return categoryRepository.findAllByIdJournal(journalRepository.findByName(journalName));
     }
 
     public Category findByNameAndIdJournal(String name, String journal){
