@@ -61,8 +61,8 @@ public class CategoryControllerTests {
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @Test
-    /*public void getFindAllNoteFromJournalTest()
+    /*@Test
+    public void getFindAllNoteFromJournalTest()
             throws Exception {
         List<String> strings = Arrays.asList(journalSat);
 

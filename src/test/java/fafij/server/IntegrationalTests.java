@@ -67,7 +67,7 @@ public class IntegrationalTests {
     private DeleteNote deleteNote;
     private Type collectionType;
     private List<NoteDTOBean> lnb;
-    private List<String> categories;
+    private List<Category> categories;
     private UpdateNote updateNote;
 
     @Autowired
@@ -147,7 +147,7 @@ public class IntegrationalTests {
                 .content(requestJson))
                 .andReturn();
         json = result.getResponse().getContentAsString();
-        Assertions.assertEquals("["+Constants.User.category+"]",json, "Lists of Categories are not equals");
+        Assertions.assertEquals("[{"+"\"name\":"+"\""+Constants.User.category+"\""+"}]",json, "Lists of Categories are not equals");
 
         //create Note
         requestJson=ow.writeValueAsString(addNote);
@@ -240,10 +240,10 @@ public class IntegrationalTests {
                 .content(requestJson))
                 .andReturn();
         json = result.getResponse().getContentAsString();
-        collectionType = new TypeToken<Collection<String>>(){}.getType();
+        collectionType = new TypeToken<List<Category>>(){}.getType();
         categories = new Gson().fromJson( json , collectionType);
         clone = false;
-        for (String category : categories) {
+        for (Category category : categories) {
            clone = category.equals(Constants.UserDB.category);
             if (clone) {break;}
         }
