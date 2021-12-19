@@ -63,7 +63,7 @@ public class CategoryControllerTests {
     }
 
     @Test
-    public void getFindAllNoteFromJournalTest()
+    /*public void getFindAllNoteFromJournalTest()
             throws Exception {
         List<String> strings = Arrays.asList(journalSat);
 
@@ -77,7 +77,7 @@ public class CategoryControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isOk());
-    }
+    }*/
 
     @ParameterizedTest
     @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
