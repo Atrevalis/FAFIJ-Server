@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @EnableTransactionManagement
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -82,4 +83,18 @@ public class NoteDTO {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NoteDTO noteDTO = (NoteDTO) o;
+        return date.equals(noteDTO.date) && sum.equals(noteDTO.sum) && idCtgr.equals(noteDTO.idCtgr) && comment.equals(noteDTO.comment);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, sum, idCtgr, comment);
+    }
 }
+

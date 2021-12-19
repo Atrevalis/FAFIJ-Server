@@ -85,4 +85,11 @@ public class Category {
     public Category() {
 
     }
+
+    public Category(Long id, String name, Journal idJournal, List<Note> idNote) {
+        this.id = id;
+        this.name = name;
+        this.idJournal = idJournal;
+        this.idNote = idNote;
+    }
 }

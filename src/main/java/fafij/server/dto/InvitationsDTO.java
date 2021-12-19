@@ -60,6 +60,15 @@ public class InvitationsDTO {
         return accept;
     }
 
+    public InvitationsDTO(JournalDTO journal, RoleDTO idRole, Boolean accept) {
+        this.journal = journal;
+        this.idRole = idRole;
+        this.accept = accept;
+    }
+
+    public InvitationsDTO() {
+    }
+
     public void setAccept(Boolean accept) {
         this.accept = accept;
     }

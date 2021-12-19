@@ -47,10 +47,11 @@ public class AddNote {
         this.comment = comment;
     }
 
-    public AddNote(String date, long sum, String category, String comment) {
+    public AddNote(String date, long sum, String category, String comment, String journalName) {
         this.date = date;
         this.sum = sum;
         this.category = category;
         this.comment = comment;
+        this.journalName = journalName;
     }
 }

@@ -1,4 +1,4 @@
-package fafij.server.controllers;
+package fafij.server.unit.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CategoryControllerTests {
 
     private final String category = "Food";
-    private final String login = "ilya";
     private final String journal = "Journal";
     private Category categoryClass = new Category();
     private UserRoles userRoles;
@@ -54,11 +53,11 @@ public class CategoryControllerTests {
     private CategoryService categoryService;
 
     @BeforeEach
-    public void SetUp(){
+    public void setUp(){
         Roles roles = new Roles();
         userRoles = new UserRoles();
         userRoles.setIdRole(roles);
-        categoryBody = new CategoryBody(category, login, journal);
+        categoryBody = new CategoryBody(category, Constants.User.login, journal);
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
@@ -73,7 +72,7 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(journalSat);
 
-        mvc.perform(post(path+"/listCategory")
+        mvc.perform(post(path+Constants.Path.listCategoryPath)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isOk());
@@ -81,7 +80,7 @@ public class CategoryControllerTests {
 
     @ParameterizedTest
     @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
-    public void CreateCategoryTest(long role) throws Exception {
+    public void createCategoryTest(long role) throws Exception {
         userRoles.getIdRole().setId(role);
         when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
         when(this.categoryService.checkCategory(categoryBody.getCategory(), categoryBody.getJournalName())).thenReturn(true);
@@ -90,13 +89,13 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(post(path+"/addCategory").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(path+Constants.Path.addCategoryPath).contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    public void CreateCategoryTestAsKid() throws Exception {
+    public void createCategoryTestAsKid() throws Exception {
         userRoles.getIdRole().setId(Constants.KidRole);
         when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
         when(this.categoryService.checkCategory(categoryBody.getCategory(), categoryBody.getJournalName())).thenReturn(true);
@@ -105,13 +104,13 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(MockMvcRequestBuilders.post(path+"/addCategory").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(MockMvcRequestBuilders.post(path+Constants.Path.addCategoryPath).contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isNotAcceptable());
     }
 
     @Test
-    public void CreateCategoryTestWithError() throws Exception {
+    public void createCategoryTestWithError() throws Exception {
         Exception e = new RuntimeException();
         userRoles.getIdRole().setId(Constants.KidRole);
         when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenThrow(e);
@@ -121,15 +120,15 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(post(path+"/addCategory").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(path+Constants.Path.addCategoryPath).contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isInternalServerError());
     }
 
     @ParameterizedTest
     @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
-    public void DeleteCategoryTest(long role) throws Exception {
-        categoryBody = new CategoryBody(category, login, journal);
+    public void deleteCategoryTest(long role) throws Exception {
+        categoryBody = new CategoryBody(category, Constants.User.login, journal);
         userRoles.getIdRole().setId(role);
         when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
         when(categoryService.findByNameAndIdJournal(categoryBody.getCategory(), categoryBody.getJournalName())).thenReturn(categoryClass);
@@ -137,14 +136,14 @@ public class CategoryControllerTests {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
-        this.mvc.perform(post(path+"/deleteCategory")
+        this.mvc.perform(post(path+Constants.Path.deleteCategoryPath)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    public void DeleteCategoryTestAsKid() throws Exception {
+    public void deleteCategoryTestAsKid() throws Exception {
 
         userRoles.getIdRole().setId(Constants.KidRole);
         when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenReturn(userRoles);
@@ -153,7 +152,7 @@ public class CategoryControllerTests {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
-        mvc.perform(post(path+"/deleteCategory")
+        mvc.perform(post(path+Constants.Path.deleteCategoryPath)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotAcceptable());
@@ -161,7 +160,7 @@ public class CategoryControllerTests {
 
     @ParameterizedTest
     @ValueSource(longs = {Constants.AdminRole,Constants.AdultRole})
-    public void DeleteCategoryTestWithError(long role) throws Exception {
+    public void deleteCategoryTestWithError(long role) throws Exception {
         Exception e = new RuntimeException();
         userRoles.getIdRole().setId(role);
         when(this.categoryService.findByUserAndJournal(categoryBody.getLogin(), categoryBody.getJournalName())).thenThrow(e);
@@ -171,7 +170,7 @@ public class CategoryControllerTests {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(categoryBody);
 
-        mvc.perform(post(path+"/deleteCategory")
+        mvc.perform(post(path+Constants.Path.deleteCategoryPath)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isInternalServerError());

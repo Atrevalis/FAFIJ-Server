@@ -109,6 +109,14 @@ public class Roles {
     public Roles() {
 
     }
+
+    public Roles(Long id, List<Journal> journal, List<Users> user, List<Invitations> idInvitations, String roleName) {
+        this.id = id;
+        this.journal = journal;
+        this.user = user;
+        this.idInvitations = idInvitations;
+        this.roleName = roleName;
+    }
 }
 
 

@@ -28,7 +28,6 @@ public class CategoryController {
                 }else{
                     response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
                 }
-
             }else{
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
             }

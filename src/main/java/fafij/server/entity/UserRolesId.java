@@ -70,5 +70,9 @@ public class UserRolesId implements Serializable {
 
     }
 
-
+    public UserRolesId(Users idUser, Journal idJournal, Roles idRole) {
+        this.idUser = idUser;
+        this.idJournal = idJournal;
+        this.idRole = idRole;
+    }
 }
